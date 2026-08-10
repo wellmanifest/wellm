@@ -6,6 +6,13 @@
 
 ### Other
 - Update .governance/delivery-events.jsonl
+- Update examples/iot-three-layer/firmware/device.py
+- Update scripts/e2e-iot.sh
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
 - Update scripts/e2e-docker.sh
 
 ## [0.2.2] - 2026-08-10
