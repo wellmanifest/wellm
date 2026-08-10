@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_policy_dialect_parses_example_rules() -> None:
     runtime = WellManifestRuntime()
-    source = (ROOT / "examples" / "policy" / "CONTRIBUTING.policy").read_text()
+    source = (ROOT / "examples" / "policy" / "CONTRIBUTING.policy").read_text(encoding="utf-8")
     document = runtime.parse(source, dialect="policy")
     ids = [rule["id"] for rule in document.ir["rules"]]
     assert ids == ["C-CONTEXT-001", "C-CONTEXT-002"]
@@ -19,7 +19,9 @@ def test_policy_dialect_parses_example_rules() -> None:
 
 def test_original_contributing_markdown_is_importable_as_policy_ir() -> None:
     runtime = WellManifestRuntime()
-    source = (ROOT / "tests" / "fixtures" / "governance" / "CONTRIBUTING.md").read_text()
+    source = (ROOT / "tests" / "fixtures" / "governance" / "CONTRIBUTING.md").read_text(
+        encoding="utf-8"
+    )
     document = runtime.parse(source, dialect="policy")
     assert len(document.ir["rules"]) >= 40
     assert any(rule["id"] == "C-VALIDATION-006" for rule in document.ir["rules"])

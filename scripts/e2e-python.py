@@ -2,16 +2,18 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 
 from wellmanifest.client import WellManifestClient
 
 base_url = os.getenv("WELLMANIFEST_URL", "http://runtime:8080")
+expected_version = (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
 client = WellManifestClient(base_url, timeout=10)
 
 capabilities = client.capabilities()
 assert capabilities["protocol"] == "wellmanifest.protocol/v1"
 versions = client.versions()
-assert versions["package"]["version"] == "0.2.0rc4"
+assert versions["package"]["version"] == expected_version
 env_contract = client.env_contract()
 assert env_contract["schema"] == "wellm.env-contract/v1"
 

@@ -10,7 +10,16 @@ trap cleanup EXIT INT TERM
 status=0
 docker compose --env-file .env -f compose.e2e.yml up -d --build || status=$?
 if [ "$status" -eq 0 ]; then
-  docker compose --env-file .env -f compose.e2e.yml wait e2e || status=$?
+  container_id=$(docker compose --env-file .env -f compose.e2e.yml ps --all -q e2e)
+  if [ -z "$container_id" ]; then
+    printf '%s\n' 'E2E result container was not created.' >&2
+    status=1
+  else
+    docker wait "$container_id" >/dev/null || status=$?
+    if [ "$status" -eq 0 ]; then
+      status=$(docker inspect --format '{{.State.ExitCode}}' "$container_id")
+    fi
+  fi
 fi
 docker compose --env-file .env -f compose.e2e.yml logs --no-color
 exit "$status"

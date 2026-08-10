@@ -6,7 +6,7 @@ WellManifest, procedural policy, restricted TypeScript data modules and proto3
 IR into one document/envelope model with schema validation and structured
 `ERROR`, `WARNING` and `INFO` diagnostics.
 
-Release candidate `0.2.0rc4` extends the governance profile with a complete
+Release `0.2.2` extends the governance profile with a complete
 three-layer IoT example, explicit Docker IPAM, one generated environment
 contract, a version-and-hash registry for formats/APIs/schemas, bidirectional
 JSON Schema ⇄ typed Wellm modules, TOON/code2llm map import and deterministic
@@ -431,7 +431,7 @@ independently resolve authority from the active contract.
 
 ## Package, service and runtime matrix
 
-| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc4` |
+| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.2` |
 |---|---|---:|---:|---:|---:|---|---|
 | protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | envelope, negotiation, diagnostics | specified + schemas |
 | Python | `wellm` / `wellmanifest` alias | remote client | local/service | RPi | control | parsers, validation, planner, benchmark | **working/tested** |
@@ -558,4 +558,4 @@ not invent or bind to an undocumented API.
 
 ## License
 
-Apache-2.0.
+Licensed under Apache-2.0.

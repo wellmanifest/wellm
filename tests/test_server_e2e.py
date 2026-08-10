@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import httpx
 import pytest
 
 from wellmanifest.server import create_app
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.mark.asyncio
@@ -52,7 +57,9 @@ async def test_http_versions_env_and_intent_analysis_endpoints() -> None:
     async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
         versions = await client.get("/v1/versions")
         assert versions.status_code == 200
-        assert versions.json()["package"]["version"] == "0.2.0rc4"
+        assert versions.json()["package"]["version"] == (ROOT / "VERSION").read_text(
+            encoding="utf-8"
+        ).strip()
 
         env_contract = await client.get("/v1/env-contract")
         assert env_contract.status_code == 200

@@ -1,5 +1,84 @@
 # Changelog
 
+## [Unreleased]
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update examples/iot-three-layer/firmware/device.py
+- Update scripts/e2e-iot.sh
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update scripts/e2e-docker.sh
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update docker/node-e2e.Dockerfile
+- Update docker/python-e2e.Dockerfile
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .gitattributes
+- Update .governance/delivery-events.jsonl
+
+## [0.2.2] - 2026-08-10
+
+### Docs
+- Update README.md
+
+### Test
+- Update tests/test_docker_network_preflight.py
+- Update tests/test_governance_profiles.py
+- Update tests/test_policy.py
+- Update tests/test_todo2code_bridge.py
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update crates/wellmanifest-python/src/lib.rs
+- Update scripts/e2e-local.sh
+- Update scripts/e2e-node.mjs
+- Update scripts/e2e-python.py
+- Update src/wellmanifest/static/index.html
+- Update www/index.html
+
+## [0.2.2] - 2026-08-10
+
+### Test
+- Update tests/test_compatibility.py
+- Update tests/test_server_e2e.py
+- Update tests/test_versions_env_iot.py
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update config/version-registry.json
+- Update crates/wellmanifest-core/src/lib.rs
+- Update crates/wellmanifest-node/src/lib.rs
+- Update examples/governance/generated/diagnostics.json.wellm-meta.json
+- Update examples/governance/generated/intent.json.wellm-meta.json
+- Update examples/governance/generated/manifest.default.json.wellm-meta.json
+- Update examples/governance/generated/stack-profiles.json.wellm-meta.json
+- Update src/wellmanifest/resources/version-registry.json
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update Cargo.lock
+- Update VERSION
+- Update config/version-registry.json
+- Update packages/js/package.json
+- Update project/governance-check.sh
+- Update src/wellmanifest/resources/version-registry.json
+- Update uv.lock
+
+
 ## 0.2.0rc4 — 2026-08-05
 
 - Added a three-layer IoT reference deployment with frontend, backend,

@@ -64,9 +64,10 @@ assert toon['moduleCount'] == 235
 print('versions/env/types/intent/TOON local e2e: PASS')
 PY2
 printf '%s\n' 'plesk/benchmark/governance local e2e: PASS'
-python - <<'PY'
-import json, os, urllib.request
+python - "$ROOT/VERSION" <<'PY'
+import json, os, sys, urllib.request
 base=os.environ['WELLMANIFEST_URL']
+expected_version=open(sys.argv[1], encoding='utf-8').read().strip()
 body=json.dumps({
   'source':'status:\n  value: SUCCEEDED\n  errors: []\n',
   'source_dialect':'yaml','target_dialect':'json','projection':'data'
@@ -80,7 +81,7 @@ with urllib.request.urlopen(base+'/v1/events?limit=20',timeout=5) as r:
 assert any(e['type']=='ProcessCompleted' for e in events)
 with urllib.request.urlopen(base+'/v1/versions',timeout=5) as r:
   versions=json.load(r)
-assert versions['package']['version'] == '0.2.0rc4'
+assert versions['package']['version'] == expected_version
 with urllib.request.urlopen(base+'/v1/env-contract',timeout=5) as r:
   env_contract=json.load(r)
 assert env_contract['schema'] == 'wellm.env-contract/v1'

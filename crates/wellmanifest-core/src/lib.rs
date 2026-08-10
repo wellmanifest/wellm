@@ -75,11 +75,7 @@ pub fn parse_value(source: &str, dialect: &str) -> Result<Value, WellManifestErr
     }
 }
 
-pub fn emit_value(
-    value: &Value,
-    dialect: &str,
-    pretty: bool,
-) -> Result<String, WellManifestError> {
+pub fn emit_value(value: &Value, dialect: &str, pretty: bool) -> Result<String, WellManifestError> {
     match normalize_dialect(dialect).as_str() {
         "json" if pretty => Ok(format!("{}\n", serde_json::to_string_pretty(value)?)),
         "json" => Ok(serde_json::to_string(value)?),

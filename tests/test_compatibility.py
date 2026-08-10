@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def test_original_wellm_01_api_remains_available() -> None:
     from well import Runtime, greet, hello
@@ -12,7 +17,7 @@ def test_original_wellm_01_api_remains_available() -> None:
 def test_new_primary_namespace_exposes_the_runtime() -> None:
     from wellm import WellManifestRuntime, __version__
 
-    assert __version__ == "0.2.0rc4"
+    assert __version__ == (ROOT / "VERSION").read_text(encoding="utf-8").strip()
     assert WellManifestRuntime().capabilities()["protocol"] == "wellmanifest.protocol/v1"
 
 
