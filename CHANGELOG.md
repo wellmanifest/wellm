@@ -6,6 +6,12 @@
 
 ### Other
 - Update .governance/delivery-events.jsonl
+- Update scripts/e2e-docker.sh
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
 - Update docker/node-e2e.Dockerfile
 - Update docker/python-e2e.Dockerfile
 
