@@ -7,6 +7,8 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from .version import __version__
+
 
 class Severity(str, Enum):
     ERROR = "ERROR"
@@ -43,7 +45,7 @@ class DocumentMetadata(BaseModel):
     document_kind: Literal["data", "schema", "policy", "api", "module", "ir"] = "data"
     schema_dialect: str | None = None
     schema_ref: str | None = None
-    runtime_version: str = "0.2.0rc4"
+    runtime_version: str = __version__
     ir_version: str = "wellmanifest-ir/v1"
     source_name: str | None = None
     directives: dict[str, Any] = Field(default_factory=dict)

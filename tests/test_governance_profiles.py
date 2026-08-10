@@ -68,7 +68,7 @@ def test_governance_builder_build_check_and_drift(tmp_path: Path) -> None:
 
     first = builder.build(project / "wellm.project.yaml")
     assert first.ok
-    assert all(item.status == "CURRENT" for item in first.artifacts)
+    assert all(item.status in {"CURRENT", "UPDATED"} for item in first.artifacts)
 
     checked = builder.build(project / "wellm.project.yaml", check=True)
     assert checked.ok

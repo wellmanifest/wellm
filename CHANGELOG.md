@@ -4,6 +4,26 @@
 
 ## [0.2.2] - 2026-08-10
 
+### Docs
+- Update README.md
+
+### Test
+- Update tests/test_docker_network_preflight.py
+- Update tests/test_governance_profiles.py
+- Update tests/test_policy.py
+- Update tests/test_todo2code_bridge.py
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update crates/wellmanifest-python/src/lib.rs
+- Update scripts/e2e-local.sh
+- Update scripts/e2e-node.mjs
+- Update scripts/e2e-python.py
+- Update src/wellmanifest/static/index.html
+- Update www/index.html
+
+## [0.2.2] - 2026-08-10
+
 ### Test
 - Update tests/test_compatibility.py
 - Update tests/test_server_e2e.py

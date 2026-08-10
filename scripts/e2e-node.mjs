@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
 import {WellManifestClient, UrirunProcessClient} from "../packages/js/src/index.js";
 
 const baseUrl = process.env.WELLMANIFEST_URL || "http://runtime:8080";
+const expectedVersion = readFileSync(new URL("../VERSION", import.meta.url), "utf8").trim();
 const client = new WellManifestClient({baseUrl, timeoutMs: 10000});
 
 const capabilities = await client.capabilities();
 assert.equal(capabilities.protocol, "wellmanifest.protocol/v1");
 const versions = await client.versions();
-assert.equal(versions.package.version, "0.2.0rc4");
+assert.equal(versions.package.version, expectedVersion);
 const envContract = await client.envContract();
 assert.equal(envContract.schema, "wellm.env-contract/v1");
 

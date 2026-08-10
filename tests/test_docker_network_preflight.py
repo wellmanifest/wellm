@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ipaddress
+import os
 from pathlib import Path
 import sys
 
@@ -83,7 +84,8 @@ def test_dotenv_update_is_atomic_and_preserves_other_values(tmp_path: Path) -> N
     assert values["TOKEN"] == "preserve"
     assert values["WELLMANIFEST_PUBLIC_SUBNET"] == "10.240.1.0/24"
     assert values["WELLMANIFEST_RUNTIME_SUBNET"] == "10.240.2.0/24"
-    assert dotenv.stat().st_mode & 0o777 == 0o600
+    if os.name != "nt":
+        assert dotenv.stat().st_mode & 0o777 == 0o600
 
 
 def test_repairs_foreign_container_and_host_listener_ports() -> None:

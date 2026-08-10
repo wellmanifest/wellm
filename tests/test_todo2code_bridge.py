@@ -4,9 +4,12 @@ import os
 from pathlib import Path
 import subprocess
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
+@pytest.mark.skipif(os.name == "nt", reason="bridge fixture exercises a POSIX shell script")
 def test_todo2code_bridge_extracts_the_explicit_evidence_directory(tmp_path: Path) -> None:
     fake = tmp_path / "t2c"
     args_file = tmp_path / "args.txt"
