@@ -4,6 +4,12 @@
 
 ## [0.2.2] - 2026-08-10
 
+### Other
+- Update .gitattributes
+- Update .governance/delivery-events.jsonl
+
+## [0.2.2] - 2026-08-10
+
 ### Docs
 - Update README.md
 

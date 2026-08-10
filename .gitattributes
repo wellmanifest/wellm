@@ -1,0 +1,16 @@
+* text=auto
+
+# Wellm governance inputs and generated artifacts are byte-stable contracts.
+*.json text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.wm text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Executable and language sources use the same portable repository convention.
+*.js text eol=lf
+*.mjs text eol=lf
+*.py text eol=lf
+*.rs text eol=lf
+*.sh text eol=lf
