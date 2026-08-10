@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+## [0.2.2] - 2026-08-10
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update Cargo.lock
+- Update VERSION
+- Update config/version-registry.json
+- Update packages/js/package.json
+- Update project/governance-check.sh
+- Update src/wellmanifest/resources/version-registry.json
+- Update uv.lock
+
+
 ## 0.2.0rc4 — 2026-08-05
 
 - Added a three-layer IoT reference deployment with frontend, backend,

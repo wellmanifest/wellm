@@ -462,7 +462,7 @@
       "version": "v1",
       "compatibility": "exact-major",
       "dialect": "json-schema@2020-12",
-      "sha256": "sha256:20d511d7199b63c72d9d79864af100c93d90340d3ff81e02eef2054e8613866b"
+      "sha256": "sha256:31415447aa9cc650c233c9b5120502c1d115eadf143e3d2bba129ba48078a90a"
     },
     {
       "path": "schemas/iot-device-config.schema.json",
@@ -570,7 +570,7 @@
       "version": "v1",
       "compatibility": "exact-major",
       "dialect": "json-schema@2020-12",
-      "sha256": "sha256:68603d85d3dc319098841ebfc8eb115f97448d29ccb0b04e8aebb4c2dcd51029"
+      "sha256": "sha256:fde25adf1a19abb9b2520f4345eb2faaf49c99365b4b90bc25fbd30a7a261e1c"
     },
     {
       "path": "schemas/version-registry.schema.json",

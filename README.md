@@ -558,4 +558,4 @@ not invent or bind to an undocumented API.
 
 ## License
 
-Apache-2.0.
+Licensed under Apache-2.0.
