@@ -25,7 +25,7 @@ versioning:
   - pyproject.toml:version
   - packages/js/package.json:version
   - Cargo.toml:version
-  - src/well/__init__.py:__version__
+  - src/wellmanifest/version.py:__version__
   bump_rules:
     patch: 10
     minor: 50
