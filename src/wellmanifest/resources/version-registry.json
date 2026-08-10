@@ -2,7 +2,7 @@
   "schema": "wellm.version-registry/v1",
   "package": {
     "name": "wellm",
-    "version": "0.2.0rc4"
+    "version": "0.2.2"
   },
   "protocols": [
     {
@@ -387,7 +387,7 @@
       "path": "schemas/diagnostic.schema.json",
       "id": "https://wellmanifest.org/schemas/diagnostic.schema.json",
       "contract": "diagnostic.schema",
-      "version": "0.2.0rc4",
+      "version": "0.2.2",
       "compatibility": "exact-hash",
       "dialect": "json-schema@2020-12",
       "sha256": "sha256:cc85c5546f7788d979bf6d3f09322dc68b0bd346ccfb3b35eb6f9ad5fee8ed83"
@@ -423,7 +423,7 @@
       "path": "schemas/execute-request.schema.json",
       "id": "https://wellmanifest.org/schemas/execute-request.schema.json",
       "contract": "execute-request.schema",
-      "version": "0.2.0rc4",
+      "version": "0.2.2",
       "compatibility": "exact-hash",
       "dialect": "json-schema@2020-12",
       "sha256": "sha256:1250ef351a98c44e5405657f7d594436d645054829e2faeefae327809d724442"
@@ -558,7 +558,7 @@
       "path": "schemas/status.schema.json",
       "id": "https://wellmanifest.org/schemas/status.schema.json",
       "contract": "status.schema",
-      "version": "0.2.0rc4",
+      "version": "0.2.2",
       "compatibility": "exact-hash",
       "dialect": "json-schema@2020-12",
       "sha256": "sha256:7b919ef4a8074ca492764aff80eb2178cad3ebeac1c29c6e45c0ab394167f7f1"
@@ -586,22 +586,22 @@
     {
       "ecosystem": "python",
       "name": "wellm",
-      "version": "0.2.0rc4"
+      "version": "0.2.2"
     },
     {
       "ecosystem": "npm",
       "name": "@wellmanifest/wellm-sdk",
-      "version": "0.2.0-rc.4"
+      "version": "0.2.2"
     },
     {
       "ecosystem": "cargo",
       "name": "wellmanifest-core",
-      "version": "0.2.0-rc.4"
+      "version": "0.2.2"
     },
     {
       "ecosystem": "container",
       "name": "wellmanifest/wellm",
-      "version": "0.2.0rc4"
+      "version": "0.2.2"
     }
   ]
 }

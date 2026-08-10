@@ -4,6 +4,24 @@
 
 ## [0.2.2] - 2026-08-10
 
+### Test
+- Update tests/test_compatibility.py
+- Update tests/test_server_e2e.py
+- Update tests/test_versions_env_iot.py
+
+### Other
+- Update .governance/delivery-events.jsonl
+- Update config/version-registry.json
+- Update crates/wellmanifest-core/src/lib.rs
+- Update crates/wellmanifest-node/src/lib.rs
+- Update examples/governance/generated/diagnostics.json.wellm-meta.json
+- Update examples/governance/generated/intent.json.wellm-meta.json
+- Update examples/governance/generated/manifest.default.json.wellm-meta.json
+- Update examples/governance/generated/stack-profiles.json.wellm-meta.json
+- Update src/wellmanifest/resources/version-registry.json
+
+## [0.2.2] - 2026-08-10
+
 ### Other
 - Update .governance/delivery-events.jsonl
 - Update Cargo.lock

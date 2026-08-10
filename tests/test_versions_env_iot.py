@@ -24,7 +24,9 @@ def test_version_registry_tracks_formats_apis_schemas_and_packages() -> None:
     assert all(item["sha256"].startswith("sha256:") for item in registry["schemas"])
     assert all(item["version"] and item["compatibility"] in {"exact-major", "exact-hash"} for item in registry["schemas"])
     assert not any(item["path"].endswith("openapi.json") for item in registry["schemas"])
-    assert registry["package"]["version"] == "0.2.0rc4"
+    assert registry["package"]["version"] == (ROOT / "VERSION").read_text(
+        encoding="utf-8"
+    ).strip()
 
 
 def test_env_contract_is_single_source_and_setup_is_idempotent(tmp_path: Path) -> None:
