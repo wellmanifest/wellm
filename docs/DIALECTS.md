@@ -14,7 +14,7 @@ common document model; they are not forced into one ambiguous grammar.
 | `toon@1` | yes | normalized YAML/map | yes | Compact JSON-model/structural maps; code2llm map import. |
 | `hcl@2` | yes | yes | yes | Static data subset plus blocks; external schema supplies types. |
 | `typed@1` | yes | yes | yes | `name: Type = value`, type declarations and hints. |
-| `policy-sh@1` | yes | no | yes | `RULE/WHEN/DO/FORBID/ASSERT/NEXT`; never executed by Bash. |
+| `wellmanifest.policy/v1` (`policy-sh@1` alias) | yes | no | yes | Typed `RULE/WHEN/DO/FORBID/ASSERT/NEXT` AST; never executed by Bash. |
 | `proto3` | yes | limited | yes | Basic parser in Python; `protoc` remains build authority. |
 
 The HCL and proto identifiers follow their public language major, but the
@@ -156,6 +156,12 @@ DO REQUIRE EXACTLY_ONE_MATCHING_TICKET IN "project/ticket-{NNN}"
 FORBID IMPORT_TARGET_SYSTEM_TICKET_TASK_OR_LOG
 ASSERT HUB_CHANGE_IS_TRACKED_WITHIN_HUB
 ```
+
+The canonical language identity is `wellmanifest.policy/v1`; `policy-sh@1` is
+only a compatibility alias. Conditions, action payloads and guards, assertions
+and `NEXT` branches are exported as recursive typed AST nodes rather than raw
+command text. Compatibility `text`, `verb`, `arguments`, `when` and `next`
+fields remain during migration for emitters and older consumers.
 
 The syntax is shell-shaped for readability but has no shell expansion,
 pipelines, command substitution, redirection or arbitrary process execution.

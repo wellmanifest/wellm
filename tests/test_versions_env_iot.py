@@ -18,7 +18,14 @@ def test_version_registry_tracks_formats_apis_schemas_and_packages() -> None:
     dialects = {item["id"] for item in registry["dialects"]}
     api_ids = {item["id"] for item in registry["apis"]}
     schema_paths = {item["path"] for item in registry["schemas"]}
-    assert {"json@rfc8259", "yaml@1.2/json-compatible", "typed@1", "hcl@2", "toon@1"} <= dialects
+    assert {
+        "json@rfc8259",
+        "yaml@1.2/json-compatible",
+        "typed@1",
+        "hcl@2",
+        "toon@1",
+        "wellmanifest.policy/v1",
+    } <= dialects
     assert {"wellm-http-api", "wellm-websocket-api", "wellm-mqtt-api", "wellm-grpc-api"} <= api_ids
     assert "schemas/intent-format-analysis.schema.json" in schema_paths
     assert all(item["sha256"].startswith("sha256:") for item in registry["schemas"])

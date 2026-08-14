@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import hashlib
-from importlib.resources import files
 import json
 import re
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
-import yaml
 from jsonschema import Draft202012Validator
 
 from .version import __version__
@@ -61,7 +60,11 @@ def build_version_registry(root: str | Path | None = None) -> dict[str, Any]:
     dialects = []
     for item in DialectRegistry().describe():
         dialect_id = str(item["name"])
-        family, _, version = dialect_id.partition("@")
+        family, separator, version = dialect_id.partition("@")
+        if not separator:
+            slash_version = re.fullmatch(r"(.+)/v([1-9][0-9]*)", dialect_id)
+            if slash_version:
+                family, version = slash_version.group(1), slash_version.group(2)
         dialects.append(
             {
                 "id": dialect_id,
@@ -215,7 +218,8 @@ def validate_version_registry(
             if not schema_file.exists():
                 raise ValueError(f"API contract is missing: {api['id']} -> {schema_file}")
     for dialect in registry.get("dialects", []):
-        if "@" not in str(dialect.get("id", "")) and dialect.get("id") != "proto3":
+        dialect_id = str(dialect.get("id", ""))
+        if "@" not in dialect_id and not re.search(r"/v[1-9][0-9]*$", dialect_id) and dialect_id != "proto3":
             raise ValueError(f"Dialect identifier is not versioned: {dialect.get('id')}")
     for profile in registry.get("formatProfiles", []):
         if "@" not in str(profile.get("id", "")):
