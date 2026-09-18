@@ -6,15 +6,24 @@ from typing import Any
 
 from wellmanifest.models import Diagnostic, Document, DocumentMetadata, Severity, SourcePosition, SourceRange
 
-from .base import Dialect
+from .base import Dialect, DialectError
 from .common import split_runtime_prelude
 from .json_dialect import JsonDialect
+from .policy_ast import PolicyAstError, parse_action, parse_condition, parse_next
 
 
 class PolicyDialect(Dialect):
-    name = "policy-sh@1"
-    aliases = ("policy", "policy-sh", "dsl-policy", "wellm-policy", "application/wellmanifest+policy")
-    media_types = ("application/wellmanifest+policy",)
+    name = "wellmanifest.policy/v1"
+    aliases = (
+        "policy",
+        "policy-sh",
+        "policy-sh@1",
+        "dsl-policy",
+        "wellm-policy",
+        "application/wellmanifest+policy",
+        "application/vnd.wellmanifest.policy",
+    )
+    media_types = ("application/wellmanifest+policy", "application/vnd.wellmanifest.policy")
     extensions = (".policy", ".policy.dsl", ".dsl")
     document_kind = "policy"
 
@@ -51,10 +60,13 @@ class PolicyDialect(Dialect):
                     "id": rule_match.group(1),
                     "type": (rule_match.group(2) or "REQUIRED").upper(),
                     "when": None,
+                    "condition": None,
                     "actions": [],
                     "forbids": [],
                     "assertions": [],
+                    "assertionNodes": [],
                     "next": [],
+                    "nextTargets": [],
                     "sourceLine": index,
                 }
                 rules.append(current_rule)
@@ -73,6 +85,7 @@ class PolicyDialect(Dialect):
                         "from": transition_match.group(1),
                         "to": transition_match.group(2),
                         "when": transition_match.group(3),
+                        "condition": self._parse_condition(transition_match.group(3)),
                         "sourceLine": index,
                     }
                 )
@@ -82,14 +95,19 @@ class PolicyDialect(Dialect):
                 upper = line.upper()
                 if upper.startswith("WHEN "):
                     current_rule["when"] = line[5:].strip()
+                    current_rule["condition"] = self._parse_condition(line[5:].strip())
                 elif upper.startswith("DO "):
                     current_rule["actions"].append(self._parse_action(line[3:].strip()))
                 elif upper.startswith("FORBID "):
                     current_rule["forbids"].append(self._parse_action(line[7:].strip()))
                 elif upper.startswith("ASSERT "):
                     current_rule["assertions"].append(line[7:].strip())
+                    current_rule.setdefault("assertionNodes", []).append(
+                        self._parse_condition(line[7:].strip())
+                    )
                 elif upper.startswith("NEXT "):
                     current_rule["next"].append(line[5:].strip())
+                    current_rule.setdefault("nextTargets", []).extend(self._parse_next(line[5:].strip()))
                 else:
                     current_rule.setdefault("raw", []).append(line)
                 continue
@@ -107,6 +125,9 @@ class PolicyDialect(Dialect):
 
         ir = {
             "kind": "policy",
+            "schema": "wellmanifest.policy/ir/v1",
+            "dialect": "wellmanifest.policy/v1",
+            "languageVersion": "1",
             "metadata": metadata_values,
             "rules": rules,
             "states": states,
@@ -284,13 +305,27 @@ class PolicyDialect(Dialect):
         return line
 
     @staticmethod
+    def _parse_condition(text: str | None) -> dict[str, Any] | None:
+        if text is None:
+            return None
+        try:
+            return parse_condition(text)
+        except PolicyAstError as exc:
+            raise DialectError("POLICY-SYNTAX-001", str(exc)) from exc
+
+    @staticmethod
     def _parse_action(text: str) -> dict[str, Any]:
-        words = text.split()
-        return {
-            "verb": words[0] if words else "",
-            "arguments": words[1:],
-            "text": text,
-        }
+        try:
+            return parse_action(text)
+        except PolicyAstError as exc:
+            raise DialectError("POLICY-SYNTAX-001", str(exc)) from exc
+
+    @staticmethod
+    def _parse_next(text: str) -> list[dict[str, Any]]:
+        try:
+            return parse_next(text)
+        except PolicyAstError as exc:
+            raise DialectError("POLICY-SYNTAX-001", str(exc)) from exc
 
     @staticmethod
     def _literal_or_text(value: str) -> Any:

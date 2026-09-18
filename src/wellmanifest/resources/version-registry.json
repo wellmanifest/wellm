@@ -170,21 +170,6 @@
       ]
     },
     {
-      "id": "policy-sh@1",
-      "family": "policy-sh",
-      "version": "1",
-      "status": "candidate",
-      "documentKind": "policy",
-      "mediaTypes": [
-        "application/wellmanifest+policy"
-      ],
-      "extensions": [
-        ".policy",
-        ".policy.dsl",
-        ".dsl"
-      ]
-    },
-    {
       "id": "proto3",
       "family": "proto3",
       "version": "unversioned",
@@ -260,6 +245,22 @@
         ".wm.ts",
         ".wellm.ts",
         ".manifest.ts"
+      ]
+    },
+    {
+      "id": "wellmanifest.policy/v1",
+      "family": "wellmanifest.policy",
+      "version": "1",
+      "status": "candidate",
+      "documentKind": "policy",
+      "mediaTypes": [
+        "application/wellmanifest+policy",
+        "application/vnd.wellmanifest.policy"
+      ],
+      "extensions": [
+        ".policy",
+        ".policy.dsl",
+        ".dsl"
       ]
     },
     {
