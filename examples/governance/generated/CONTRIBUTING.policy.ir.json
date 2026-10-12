@@ -1,5 +1,7 @@
 {
+  "dialect": "wellmanifest.policy/v1",
   "kind": "policy",
+  "languageVersion": "1",
   "metadata": {
     "document": "CONTRIBUTING",
     "language": "PL",
@@ -17,6 +19,21 @@
             "=",
             "GOVERNANCE_HUB_MAINTENANCE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "TASK_CONTEXT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "GOVERNANCE_HUB_MAINTENANCE",
+              "node": "symbol"
+            }
+          },
           "text": "SET TASK_CONTEXT = GOVERNANCE_HUB_MAINTENANCE",
           "verb": "SET"
         },
@@ -26,6 +43,21 @@
             "IN",
             "\"project/ticket-{NNN}\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "left": {
+              "name": "EXACTLY_ONE_MATCHING_TICKET",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "IN",
+            "right": {
+              "node": "literal",
+              "value": "project/ticket-{NNN}"
+            }
+          },
           "text": "REQUIRE EXACTLY_ONE_MATCHING_TICKET IN \"project/ticket-{NNN}\"",
           "verb": "REQUIRE"
         },
@@ -33,16 +65,45 @@
           "arguments": [
             "VALID_INTENT_AND_APPROVED_SCOPE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "VALID_INTENT_AND_APPROVED_SCOPE",
+            "node": "symbol"
+          },
           "text": "REQUIRE VALID_INTENT_AND_APPROVED_SCOPE",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUB_CHANGE_IS_TRACKED_WITHIN_HUB",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUB_CHANGE_IS_TRACKED_WITHIN_HUB"
       ],
+      "condition": {
+        "left": {
+          "name": "ROOT_REPOSITORY",
+          "node": "symbol"
+        },
+        "node": "binary",
+        "operator": "=",
+        "right": {
+          "node": "literal",
+          "value": "wellmanifest/new-project"
+        }
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "IMPORT_TARGET_SYSTEM_TICKET_TASK_OR_LOG",
+          "payload": null,
           "text": "IMPORT_TARGET_SYSTEM_TICKET_TASK_OR_LOG",
           "verb": "IMPORT_TARGET_SYSTEM_TICKET_TASK_OR_LOG"
         }
@@ -50,6 +111,7 @@
       "id": "C-CONTEXT-001",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 94,
       "type": "REQUIRED",
       "when": "ROOT_REPOSITORY = \"wellmanifest/new-project\""
@@ -62,22 +124,60 @@
             "=",
             "TARGET_SYSTEM_DELIVERY"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "TASK_CONTEXT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "TARGET_SYSTEM_DELIVERY",
+              "node": "symbol"
+            }
+          },
           "text": "SET TASK_CONTEXT = TARGET_SYSTEM_DELIVERY",
           "verb": "SET"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "USE_TARGET_REPOSITORY_TICKET_LIFECYCLE",
+          "payload": null,
           "text": "USE_TARGET_REPOSITORY_TICKET_LIFECYCLE",
           "verb": "USE_TARGET_REPOSITORY_TICKET_LIFECYCLE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TARGET_WORK_REMAINS_OUTSIDE_GOVERNANCE_HUB",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TARGET_WORK_REMAINS_OUTSIDE_GOVERNANCE_HUB"
       ],
+      "condition": {
+        "left": {
+          "name": "ROOT_REPOSITORY",
+          "node": "symbol"
+        },
+        "node": "binary",
+        "operator": "!=",
+        "right": {
+          "node": "literal",
+          "value": "wellmanifest/new-project"
+        }
+      },
       "forbids": [],
       "id": "C-CONTEXT-002",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 102,
       "type": "REQUIRED",
       "when": "ROOT_REPOSITORY != \"wellmanifest/new-project\""
@@ -89,6 +189,22 @@
             "UNIQUE",
             "TICKET_ID"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ASSIGN",
+          "payload": {
+            "items": [
+              {
+                "name": "UNIQUE",
+                "node": "symbol"
+              },
+              {
+                "name": "TICKET_ID",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "ASSIGN UNIQUE TICKET_ID",
           "verb": "ASSIGN"
         },
@@ -96,6 +212,13 @@
           "arguments": [
             "TICKET_DIRECTORY_PATTERN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_DIRECTORY_PATTERN",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_DIRECTORY_PATTERN",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -103,6 +226,13 @@
           "arguments": [
             "TICKET_SPEC_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_SPEC_FILE",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_SPEC_FILE",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -110,17 +240,51 @@
           "arguments": [
             "TICKET_INDEX_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_INDEX_FILE",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_INDEX_FILE",
           "verb": "CREATE_OR_UPDATE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TASK_SCOPE_RECORDED_IN_SINGLE_TICKET_DIRECTORY",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TASK_SCOPE_RECORDED_IN_SINGLE_TICKET_DIRECTORY"
       ],
+      "condition": {
+        "left": {
+          "left": {
+            "name": "TASK_STEPS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": ">",
+          "right": {
+            "node": "literal",
+            "value": 1
+          }
+        },
+        "node": "binary",
+        "operator": "OR",
+        "right": {
+          "name": "AGENT_REQUIRED",
+          "node": "symbol"
+        }
+      },
       "forbids": [],
       "id": "C-TICKET-001",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 112,
       "type": "REQUIRED",
       "when": "TASK_STEPS > 1 OR AGENT_REQUIRED"
@@ -132,18 +296,51 @@
             "HUMAN_OR_TRUSTED_INTAKE_BOUNDARY_TO_CREATE",
             "\"user-{github_username}.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "items": [
+              {
+                "name": "HUMAN_OR_TRUSTED_INTAKE_BOUNDARY_TO_CREATE",
+                "node": "symbol"
+              },
+              {
+                "node": "literal",
+                "value": "user-{github_username}.md"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "REQUIRE HUMAN_OR_TRUSTED_INTAKE_BOUNDARY_TO_CREATE \"user-{github_username}.md\"",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUMAN_PARTICIPANT_CONTENT_HAS_HUMAN_OWNERSHIP",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUMAN_PARTICIPANT_CONTENT_HAS_HUMAN_OWNERSHIP"
       ],
+      "condition": {
+        "name": "HUMAN_PARTICIPANT_STARTS_WORK",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [
             "\"user-{github_username}.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "AGENT_CREATE_OR_MODIFY",
+          "payload": {
+            "node": "literal",
+            "value": "user-{github_username}.md"
+          },
           "text": "AGENT_CREATE_OR_MODIFY \"user-{github_username}.md\"",
           "verb": "AGENT_CREATE_OR_MODIFY"
         }
@@ -151,6 +348,7 @@
       "id": "C-TICKET-002",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 120,
       "type": "REQUIRED",
       "when": "HUMAN_PARTICIPANT_STARTS_WORK"
@@ -162,6 +360,22 @@
             "IN",
             "\"preprompt.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ_TECHNICAL_DIRECTIVES",
+          "payload": {
+            "items": [
+              {
+                "name": "IN",
+                "node": "symbol"
+              },
+              {
+                "node": "literal",
+                "value": "preprompt.md"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "READ_TECHNICAL_DIRECTIVES IN \"preprompt.md\"",
           "verb": "READ_TECHNICAL_DIRECTIVES"
         },
@@ -174,17 +388,60 @@
             "IN",
             "\"ai-{PROVIDER}.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "items": [
+              {
+                "name": "GOAL",
+                "node": "symbol"
+              },
+              {
+                "name": "SCOPE",
+                "node": "symbol"
+              },
+              {
+                "name": "RISKS",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "ACCEPTANCE_CRITERIA",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "IN",
+                "right": {
+                  "node": "literal",
+                  "value": "ai-{PROVIDER}.md"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "RECORD GOAL SCOPE RISKS ACCEPTANCE_CRITERIA IN \"ai-{PROVIDER}.md\"",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "AI_BRAIN_FILE_IS_AGENT_OWNED_INTERPRETATION_NOT_HUMAN_DECISION",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "AI_BRAIN_FILE_IS_AGENT_OWNED_INTERPRETATION_NOT_HUMAN_DECISION"
       ],
+      "condition": {
+        "name": "TICKET_CREATED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-003",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 126,
       "type": "REQUIRED",
       "when": "TICKET_CREATED"
@@ -193,6 +450,10 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "WRITE_ONLY_OWNED_PARTICIPANT_FILE",
+          "payload": null,
           "text": "WRITE_ONLY_OWNED_PARTICIPANT_FILE",
           "verb": "WRITE_ONLY_OWNED_PARTICIPANT_FILE"
         },
@@ -200,17 +461,35 @@
           "arguments": [
             "ROLE_APPROPRIATE_TYPED_SECTIONS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "ROLE_APPROPRIATE_TYPED_SECTIONS",
+            "node": "symbol"
+          },
           "text": "RECORD ROLE_APPROPRIATE_TYPED_SECTIONS",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUMAN_FILE_CONTAINS_HUMAN_INPUT_AND_AGENT_FILE_CONTAINS_AGENT_PLAN_OR_REPORT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUMAN_FILE_CONTAINS_HUMAN_INPUT_AND_AGENT_FILE_CONTAINS_AGENT_PLAN_OR_REPORT"
       ],
+      "condition": {
+        "name": "PARTICIPANT_WORKS_ON_TICKET",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-004",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 132,
       "type": "REQUIRED",
       "when": "PARTICIPANT_WORKS_ON_TICKET"
@@ -222,17 +501,44 @@
             "RAW_OUTPUT_TO",
             "\"ai-{PROVIDER}-logs.txt\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "APPEND",
+          "payload": {
+            "items": [
+              {
+                "name": "RAW_OUTPUT_TO",
+                "node": "symbol"
+              },
+              {
+                "node": "literal",
+                "value": "ai-{PROVIDER}-logs.txt"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "APPEND RAW_OUTPUT_TO \"ai-{PROVIDER}-logs.txt\"",
           "verb": "APPEND"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "RAW_LOGS_PRESERVED_IN_DEDICATED_PROVIDER_LOG_FILE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "RAW_LOGS_PRESERVED_IN_DEDICATED_PROVIDER_LOG_FILE"
       ],
+      "condition": {
+        "name": "COMMAND_TEST_OR_RUNTIME_OUTPUT_PRODUCED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-005",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 138,
       "type": "REQUIRED",
       "when": "COMMAND_TEST_OR_RUNTIME_OUTPUT_PRODUCED"
@@ -243,17 +549,35 @@
           "arguments": [
             "TICKET_DIRECTORY_PATTERN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REFERENCE",
+          "payload": {
+            "name": "TICKET_DIRECTORY_PATTERN",
+            "node": "symbol"
+          },
           "text": "REFERENCE TICKET_DIRECTORY_PATTERN",
           "verb": "REFERENCE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TODO_CONTAINS_PROJECT_LEVEL_INDEX_ONLY",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TODO_CONTAINS_PROJECT_LEVEL_INDEX_ONLY"
       ],
+      "condition": {
+        "name": "PROJECT_TODO_REFERENCES_TICKET",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-006",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 143,
       "type": "REQUIRED",
       "when": "PROJECT_TODO_REFERENCES_TICKET"
@@ -262,17 +586,32 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "PRESERVE_TICKET_DIRECTORY",
+          "payload": null,
           "text": "PRESERVE_TICKET_DIRECTORY",
           "verb": "PRESERVE_TICKET_DIRECTORY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TICKET_DELETION_FORBIDDEN_WITHOUT_EXPLICIT_POST_PROJECT_USER_REQUEST",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TICKET_DELETION_FORBIDDEN_WITHOUT_EXPLICIT_POST_PROJECT_USER_REQUEST"
       ],
+      "condition": {
+        "name": "TICKET_WORK_COMPLETED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-007",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 148,
       "type": "REQUIRED",
       "when": "TICKET_WORK_COMPLETED"
@@ -284,6 +623,13 @@
             "WHEN",
             "WORKSTREAM_AND_SCOPE_MATCH"
           ],
+          "guard": {
+            "name": "WORKSTREAM_AND_SCOPE_MATCH",
+            "node": "symbol"
+          },
+          "kind": "action",
+          "opcode": "REUSE_ACTIVE_TICKET_DIRECTORY",
+          "payload": null,
           "text": "REUSE_ACTIVE_TICKET_DIRECTORY WHEN WORKSTREAM_AND_SCOPE_MATCH",
           "verb": "REUSE_ACTIVE_TICKET_DIRECTORY"
         },
@@ -294,6 +640,30 @@
             "AND",
             "WRITE_SCOPE_DOES_NOT_OVERLAP"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ALLOW_DISTINCT_ACTIVE_TICKET",
+          "payload": {
+            "items": [
+              {
+                "name": "ONLY_WHEN",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "MANIFEST_WORKSTREAM_DIFFERS",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "AND",
+                "right": {
+                  "name": "WRITE_SCOPE_DOES_NOT_OVERLAP",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "ALLOW_DISTINCT_ACTIVE_TICKET ONLY_WHEN MANIFEST_WORKSTREAM_DIFFERS AND WRITE_SCOPE_DOES_NOT_OVERLAP",
           "verb": "ALLOW_DISTINCT_ACTIVE_TICKET"
         },
@@ -301,23 +671,51 @@
           "arguments": [
             "\"ai-{PROVIDER}.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "UPDATE_SPECIFICATION_IN",
+          "payload": {
+            "node": "literal",
+            "value": "ai-{PROVIDER}.md"
+          },
           "text": "UPDATE_SPECIFICATION_IN \"ai-{PROVIDER}.md\"",
           "verb": "UPDATE_SPECIFICATION_IN"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "ACTIVE_TICKET_CONTINUED_UNTIL_EXPLICITLY_COMPLETED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "ACTIVE_TICKET_CONTINUED_UNTIL_EXPLICITLY_COMPLETED"
       ],
+      "condition": {
+        "name": "FOLLOWUP_PROMPT_OR_TASK_CONTINUATION_RECEIVED",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [
             "\"user-{github_username}.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "WRITE_OR_MODIFY",
+          "payload": {
+            "node": "literal",
+            "value": "user-{github_username}.md"
+          },
           "text": "WRITE_OR_MODIFY \"user-{github_username}.md\"",
           "verb": "WRITE_OR_MODIFY"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_SPURIOUS_NEW_TICKET_DIRECTORY",
+          "payload": null,
           "text": "CREATE_SPURIOUS_NEW_TICKET_DIRECTORY",
           "verb": "CREATE_SPURIOUS_NEW_TICKET_DIRECTORY"
         }
@@ -325,6 +723,7 @@
       "id": "C-TICKET-008",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 153,
       "type": "REQUIRED",
       "when": "FOLLOWUP_PROMPT_OR_TASK_CONTINUATION_RECEIVED"
@@ -340,17 +739,60 @@
             "AND",
             "TYPED_SECTIONS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "items": [
+              {
+                "name": "EXPLICIT",
+                "node": "symbol"
+              },
+              {
+                "name": "participant-id",
+                "node": "symbol"
+              },
+              {
+                "name": "role",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "ticket",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "AND",
+                "right": {
+                  "name": "TYPED_SECTIONS",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "REQUIRE EXPLICIT participant-id role ticket AND TYPED_SECTIONS",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUMAN_AND_AGENT_INTENT_REMAIN_SEPARATE_AND_AUDITABLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUMAN_AND_AGENT_INTENT_REMAIN_SEPARATE_AND_AUDITABLE"
       ],
+      "condition": {
+        "name": "PARTICIPANT_FILE_CREATED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-009",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 162,
       "type": "REQUIRED",
       "when": "PARTICIPANT_FILE_CREATED"
@@ -363,21 +805,59 @@
             "=",
             "[\"unresolved:{required-role}\"]"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "responseRequiredFrom",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "items": [
+                {
+                  "node": "literal",
+                  "value": "unresolved:{required-role}"
+                }
+              ],
+              "node": "list"
+            }
+          },
           "text": "SET responseRequiredFrom = [\"unresolved:{required-role}\"]",
           "verb": "SET"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "UNRESOLVED_ROLE_EXPLICIT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "UNRESOLVED_ROLE_EXPLICIT"
       ],
+      "condition": {
+        "name": "REQUIRED_RESPONSE_HAS_NO_TRUSTED_PARTICIPANT",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "EMPTY_RESPONSE_ROUTE",
+          "payload": null,
           "text": "EMPTY_RESPONSE_ROUTE",
           "verb": "EMPTY_RESPONSE_ROUTE"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "IDENTITY_GUESSING",
+          "payload": null,
           "text": "IDENTITY_GUESSING",
           "verb": "IDENTITY_GUESSING"
         }
@@ -385,6 +865,7 @@
       "id": "C-TICKET-010",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 167,
       "type": "REQUIRED",
       "when": "REQUIRED_RESPONSE_HAS_NO_TRUSTED_PARTICIPANT"
@@ -399,13 +880,51 @@
             "OR",
             "CAPTURED_EVIDENCE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ALLOW",
+          "payload": {
+            "items": [
+              {
+                "name": "GOVERNANCE",
+                "node": "symbol"
+              },
+              {
+                "name": "DECISION",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "LOG",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "OR",
+                "right": {
+                  "name": "CAPTURED_EVIDENCE",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "ALLOW GOVERNANCE DECISION LOG OR CAPTURED_EVIDENCE",
           "verb": "ALLOW"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "IMPLEMENTATION_STORED_OUTSIDE_TICKET_DIRECTORY",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "IMPLEMENTATION_STORED_OUTSIDE_TICKET_DIRECTORY"
       ],
+      "condition": {
+        "name": "TICKET_DIRECTORY_RECEIVES_FILE",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [
@@ -413,6 +932,21 @@
             "OR",
             "RESEARCH_SCRIPT"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "EXECUTABLE_SOURCE",
+          "payload": {
+            "left": {
+              "name": "TEST",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "OR",
+            "right": {
+              "name": "RESEARCH_SCRIPT",
+              "node": "symbol"
+            }
+          },
           "text": "EXECUTABLE_SOURCE TEST OR RESEARCH_SCRIPT",
           "verb": "EXECUTABLE_SOURCE"
         }
@@ -420,6 +954,7 @@
       "id": "C-TICKET-011",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 174,
       "type": "REQUIRED",
       "when": "TICKET_DIRECTORY_RECEIVES_FILE"
@@ -430,18 +965,42 @@
           "arguments": [
             "\"project/TICKETS.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "WRITE",
+          "payload": {
+            "node": "literal",
+            "value": "project/TICKETS.md"
+          },
           "text": "WRITE \"project/TICKETS.md\"",
           "verb": "WRITE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "EXISTING_ANALYSIS_README_PRESERVED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "EXISTING_ANALYSIS_README_PRESERVED"
       ],
+      "condition": {
+        "name": "TICKET_INDEX_UPDATED",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [
             "\"project/README.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "TAKE_OWNERSHIP_OF",
+          "payload": {
+            "node": "literal",
+            "value": "project/README.md"
+          },
           "text": "TAKE_OWNERSHIP_OF \"project/README.md\"",
           "verb": "TAKE_OWNERSHIP_OF"
         }
@@ -449,6 +1008,7 @@
       "id": "C-TICKET-012",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 180,
       "type": "REQUIRED",
       "when": "TICKET_INDEX_UPDATED"
@@ -470,6 +1030,62 @@
             "conflictsWith",
             "integrationTicket"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "items": [
+              {
+                "name": "TICKET_INTENT_FILE",
+                "node": "symbol"
+              },
+              {
+                "name": "WITH",
+                "node": "symbol"
+              },
+              {
+                "name": "schema",
+                "node": "symbol"
+              },
+              {
+                "name": "ticket",
+                "node": "symbol"
+              },
+              {
+                "name": "summary",
+                "node": "symbol"
+              },
+              {
+                "name": "workstream",
+                "node": "symbol"
+              },
+              {
+                "name": "allowedPaths",
+                "node": "symbol"
+              },
+              {
+                "name": "forbiddenPaths",
+                "node": "symbol"
+              },
+              {
+                "name": "stacks",
+                "node": "symbol"
+              },
+              {
+                "name": "dependsOn",
+                "node": "symbol"
+              },
+              {
+                "name": "conflictsWith",
+                "node": "symbol"
+              },
+              {
+                "name": "integrationTicket",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "CREATE_OR_UPDATE TICKET_INTENT_FILE WITH schema ticket summary workstream allowedPaths forbiddenPaths stacks dependsOn conflictsWith integrationTicket",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -477,17 +1093,35 @@
           "arguments": [
             "WAIT_FOR_APPROVAL"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RETURN_TO",
+          "payload": {
+            "name": "WAIT_FOR_APPROVAL",
+            "node": "symbol"
+          },
           "text": "RETURN_TO WAIT_FOR_APPROVAL",
           "verb": "RETURN_TO"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "IMPLEMENTATION_DIFF_IS_SUBSET_OF_ALLOWED_PATHS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "IMPLEMENTATION_DIFF_IS_SUBSET_OF_ALLOWED_PATHS"
       ],
+      "condition": {
+        "name": "TICKET_CREATED_OR_SCOPE_CHANGED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-013",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 186,
       "type": "REQUIRED",
       "when": "TICKET_CREATED_OR_SCOPE_CHANGED"
@@ -502,6 +1136,29 @@
             "AND",
             "VALID_DEPENDENCY_DAG"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "left": {
+              "left": {
+                "name": "DISTINCT_DECLARED_WORKSTREAMS",
+                "node": "symbol"
+              },
+              "node": "binary",
+              "operator": "AND",
+              "right": {
+                "name": "NONOVERLAPPING_WRITE_SCOPES",
+                "node": "symbol"
+              }
+            },
+            "node": "binary",
+            "operator": "AND",
+            "right": {
+              "name": "VALID_DEPENDENCY_DAG",
+              "node": "symbol"
+            }
+          },
           "text": "REQUIRE DISTINCT_DECLARED_WORKSTREAMS AND NONOVERLAPPING_WRITE_SCOPES AND VALID_DEPENDENCY_DAG",
           "verb": "REQUIRE"
         },
@@ -509,17 +1166,35 @@
           "arguments": [
             "EACH_IMPLEMENTATION_DIFF_RESOLVES_TO_EXACTLY_ONE_ACTIVE_TICKET"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "EACH_IMPLEMENTATION_DIFF_RESOLVES_TO_EXACTLY_ONE_ACTIVE_TICKET",
+            "node": "symbol"
+          },
           "text": "REQUIRE EACH_IMPLEMENTATION_DIFF_RESOLVES_TO_EXACTLY_ONE_ACTIVE_TICKET",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "PARALLELISM_IS_EXPLICIT_AND_DETERMINISTIC",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "PARALLELISM_IS_EXPLICIT_AND_DETERMINISTIC"
       ],
+      "condition": {
+        "name": "MULTIPLE_ACTIVE_TICKETS_EXIST",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-015",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 192,
       "type": "REQUIRED",
       "when": "MULTIPLE_ACTIVE_TICKETS_EXIST"
@@ -534,11 +1209,43 @@
             "PLAN,",
             "BLOCKED]"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "STATUS",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "IN",
+            "right": {
+              "items": [
+                {
+                  "name": "BACKLOG",
+                  "node": "symbol"
+                },
+                {
+                  "name": "PLAN",
+                  "node": "symbol"
+                },
+                {
+                  "name": "BLOCKED",
+                  "node": "symbol"
+                }
+              ],
+              "node": "list"
+            }
+          },
           "text": "SET STATUS IN [BACKLOG, PLAN, BLOCKED]",
           "verb": "SET"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RELEASE_WORKSTREAM_AND_WRITE_SCOPE_RESERVATION",
+          "payload": null,
           "text": "RELEASE_WORKSTREAM_AND_WRITE_SCOPE_RESERVATION",
           "verb": "RELEASE_WORKSTREAM_AND_WRITE_SCOPE_RESERVATION"
         },
@@ -548,17 +1255,48 @@
             "BEFORE",
             "EDIT"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "TRANSITION_TO",
+          "payload": {
+            "items": [
+              {
+                "name": "IN_PROGRESS",
+                "node": "symbol"
+              },
+              {
+                "name": "BEFORE",
+                "node": "symbol"
+              },
+              {
+                "name": "EDIT",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "TRANSITION_TO IN_PROGRESS BEFORE EDIT",
           "verb": "TRANSITION_TO"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "ONLY_IN_PROGRESS_TICKET_IS_ACTIVE_IMPLEMENTATION_OWNER",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "ONLY_IN_PROGRESS_TICKET_IS_ACTIVE_IMPLEMENTATION_OWNER"
       ],
+      "condition": {
+        "name": "TICKET_IS_WAITING_FOR_APPROVAL_OR_EXTERNAL_DEPENDENCY",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TICKET-017",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 198,
       "type": "REQUIRED",
       "when": "TICKET_IS_WAITING_FOR_APPROVAL_OR_EXTERNAL_DEPENDENCY"
@@ -570,16 +1308,46 @@
             "MANIFEST_DECLARED_INTEGRATION_WORKSTREAM_AND",
             "VALID_INTEGRATION_TICKET"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "items": [
+              {
+                "name": "MANIFEST_DECLARED_INTEGRATION_WORKSTREAM_AND",
+                "node": "symbol"
+              },
+              {
+                "name": "VALID_INTEGRATION_TICKET",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "REQUIRE MANIFEST_DECLARED_INTEGRATION_WORKSTREAM_AND VALID_INTEGRATION_TICKET",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "CROSS_WORKSTREAM_CHANGE_HAS_FRESH_APPROVAL",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "CROSS_WORKSTREAM_CHANGE_HAS_FRESH_APPROVAL"
       ],
+      "condition": {
+        "name": "SHARED_CONTRACT_PATH_CHANGES",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SILENT_SCOPE_EXPANSION",
+          "payload": null,
           "text": "SILENT_SCOPE_EXPANSION",
           "verb": "SILENT_SCOPE_EXPANSION"
         }
@@ -587,6 +1355,7 @@
       "id": "C-TICKET-016",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 205,
       "type": "REQUIRED",
       "when": "SHARED_CONTRACT_PATH_CHANGES"
@@ -597,16 +1366,37 @@
           "arguments": [
             "TRUSTED_HUMAN_REVIEW_OR_TRUSTED_GITHUB_APP_REVIEW_OR_SIGNED_ATTESTATION"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "TRUSTED_HUMAN_REVIEW_OR_TRUSTED_GITHUB_APP_REVIEW_OR_SIGNED_ATTESTATION",
+            "node": "symbol"
+          },
           "text": "VERIFY TRUSTED_HUMAN_REVIEW_OR_TRUSTED_GITHUB_APP_REVIEW_OR_SIGNED_ATTESTATION",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "APPROVAL_MATCHES_REPOSITORY_PULL_REQUEST_ACTIVE_TICKET_AND_CURRENT_HEAD",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "APPROVAL_MATCHES_REPOSITORY_PULL_REQUEST_ACTIVE_TICKET_AND_CURRENT_HEAD"
       ],
+      "condition": {
+        "name": "APPROVAL_CLAIMED_FOR_MERGE",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ACCEPT_AGENT_WRITTEN_STATUS_AS_TRUSTED_APPROVAL",
+          "payload": null,
           "text": "ACCEPT_AGENT_WRITTEN_STATUS_AS_TRUSTED_APPROVAL",
           "verb": "ACCEPT_AGENT_WRITTEN_STATUS_AS_TRUSTED_APPROVAL"
         }
@@ -614,6 +1404,7 @@
       "id": "C-TICKET-014",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 211,
       "type": "REQUIRED",
       "when": "APPROVAL_CLAIMED_FOR_MERGE"
@@ -622,26 +1413,52 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ_REVIEWS_FROM_GITHUB_API",
+          "payload": null,
           "text": "READ_REVIEWS_FROM_GITHUB_API",
           "verb": "READ_REVIEWS_FROM_GITHUB_API"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SELECT_ONLY_CURRENT_HEAD_APPROVED_REVIEW_FROM_EXPLICIT_TYPE_SPECIFIC_ALLOWLIST",
+          "payload": null,
           "text": "SELECT_ONLY_CURRENT_HEAD_APPROVED_REVIEW_FROM_EXPLICIT_TYPE_SPECIFIC_ALLOWLIST",
           "verb": "SELECT_ONLY_CURRENT_HEAD_APPROVED_REVIEW_FROM_EXPLICIT_TYPE_SPECIFIC_ALLOWLIST"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "WRITE_VERSIONED_APPROVAL_EVIDENCE_OUTSIDE_REPOSITORY_CHECKOUT",
+          "payload": null,
           "text": "WRITE_VERSIONED_APPROVAL_EVIDENCE_OUTSIDE_REPOSITORY_CHECKOUT",
           "verb": "WRITE_VERSIONED_APPROVAL_EVIDENCE_OUTSIDE_REPOSITORY_CHECKOUT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUMAN_USES_USER_ALLOWLIST_AND_APP_USES_BOT_ALLOWLIST",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUMAN_USES_USER_ALLOWLIST_AND_APP_USES_BOT_ALLOWLIST"
       ],
+      "condition": {
+        "name": "PROTECTED_WORKFLOW_RESOLVES_REVIEW_APPROVAL",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "MIX_TRUSTED_REVIEWERS_WITH_TRUSTED_VALIDATOR_APPS",
+          "payload": null,
           "text": "MIX_TRUSTED_REVIEWERS_WITH_TRUSTED_VALIDATOR_APPS",
           "verb": "MIX_TRUSTED_REVIEWERS_WITH_TRUSTED_VALIDATOR_APPS"
         }
@@ -649,6 +1466,7 @@
       "id": "C-TICKET-018",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 217,
       "type": "REQUIRED",
       "when": "PROTECTED_WORKFLOW_RESOLVES_REVIEW_APPROVAL"
@@ -664,6 +1482,38 @@
             "ticket",
             "correlationId"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "items": [
+              {
+                "name": "DIRECT_VALIDATE_PR_INPUT",
+                "node": "symbol"
+              },
+              {
+                "name": "repository",
+                "node": "symbol"
+              },
+              {
+                "name": "pullRequest",
+                "node": "symbol"
+              },
+              {
+                "name": "headSha",
+                "node": "symbol"
+              },
+              {
+                "name": "ticket",
+                "node": "symbol"
+              },
+              {
+                "name": "correlationId",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "REQUIRE DIRECT_VALIDATE_PR_INPUT repository pullRequest headSha ticket correlationId",
           "verb": "REQUIRE"
         },
@@ -671,16 +1521,37 @@
           "arguments": [
             "EXACT_REVIEW_HEAD_AND_EXPLICIT_TRUSTED_VALIDATOR_APP_LOGIN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "EXACT_REVIEW_HEAD_AND_EXPLICIT_TRUSTED_VALIDATOR_APP_LOGIN",
+            "node": "symbol"
+          },
           "text": "REQUIRE EXACT_REVIEW_HEAD_AND_EXPLICIT_TRUSTED_VALIDATOR_APP_LOGIN",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "VALIDATOR_OUTPUT_IS_SCOPED_TO_REQUESTED_PULL_REQUEST_AND_INTENT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "VALIDATOR_OUTPUT_IS_SCOPED_TO_REQUESTED_PULL_REQUEST_AND_INTENT"
       ],
+      "condition": {
+        "name": "VALIDATOR_GITHUB_APP_APPROVES_PULL_REQUEST",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ADD_UNRELATED_VERSION_CHANGELOG_OR_REPAIR_FILES_OUTSIDE_TICKET_INTENT",
+          "payload": null,
           "text": "ADD_UNRELATED_VERSION_CHANGELOG_OR_REPAIR_FILES_OUTSIDE_TICKET_INTENT",
           "verb": "ADD_UNRELATED_VERSION_CHANGELOG_OR_REPAIR_FILES_OUTSIDE_TICKET_INTENT"
         }
@@ -688,6 +1559,7 @@
       "id": "C-TICKET-019",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 225,
       "type": "REQUIRED",
       "when": "VALIDATOR_GITHUB_APP_APPROVES_PULL_REQUEST"
@@ -696,21 +1568,43 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_SIGNATURE_AND_TRUSTED_ISSUER_BEFORE_CREATING_APPROVAL_EVIDENCE",
+          "payload": null,
           "text": "VERIFY_SIGNATURE_AND_TRUSTED_ISSUER_BEFORE_CREATING_APPROVAL_EVIDENCE",
           "verb": "VERIFY_SIGNATURE_AND_TRUSTED_ISSUER_BEFORE_CREATING_APPROVAL_EVIDENCE"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_PREDICATE_SUBJECT_REPOSITORY_PULL_REQUEST_HEAD_AND_TICKET",
+          "payload": null,
           "text": "VERIFY_PREDICATE_SUBJECT_REPOSITORY_PULL_REQUEST_HEAD_AND_TICKET",
           "verb": "VERIFY_PREDICATE_SUBJECT_REPOSITORY_PULL_REQUEST_HEAD_AND_TICKET"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "VERIFIER_OUTPUT_IS_EPHEMERAL_AND_BOUND_TO_PROTECTED_EVENT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "VERIFIER_OUTPUT_IS_EPHEMERAL_AND_BOUND_TO_PROTECTED_EVENT"
       ],
+      "condition": {
+        "name": "SIGNED_ATTESTATION_RESOLVER_RUNS",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "ACCEPT_SIGNATURE_VERIFIED_FLAG_FROM_REPOSITORY_CONTENT",
+          "payload": null,
           "text": "ACCEPT_SIGNATURE_VERIFIED_FLAG_FROM_REPOSITORY_CONTENT",
           "verb": "ACCEPT_SIGNATURE_VERIFIED_FLAG_FROM_REPOSITORY_CONTENT"
         }
@@ -718,6 +1612,7 @@
       "id": "C-TICKET-020",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "raw": [
         "DOCKER_REQUIRED_FILES = [",
         "\"Dockerfile\",",
@@ -735,6 +1630,22 @@
             "\"docker\"",
             "COMMAND_EXISTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": "docker"
+              },
+              {
+                "name": "COMMAND_EXISTS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "VERIFY \"docker\" COMMAND_EXISTS",
           "verb": "VERIFY"
         },
@@ -742,18 +1653,53 @@
           "arguments": [
             "DOCKER_ENGINE_RUNNING"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "DOCKER_ENGINE_RUNNING",
+            "node": "symbol"
+          },
           "text": "VERIFY DOCKER_ENGINE_RUNNING",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "left": {
+            "name": "DOCKER_STATUS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": "=",
+          "right": {
+            "name": "VERIFIED",
+            "node": "symbol"
+          }
         }
       ],
       "assertions": [
         "DOCKER_STATUS = VERIFIED"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_TASK_RECEIVED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-001",
       "kind": "rule",
       "next": [
         "ANALYSIS OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "ANALYSIS"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 248,
       "type": "REQUIRED",
@@ -765,18 +1711,45 @@
           "arguments": [
             "DOCKER_REQUIRED_FILES"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "DOCKER_REQUIRED_FILES",
+            "node": "symbol"
+          },
           "text": "VERIFY DOCKER_REQUIRED_FILES",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "PROJECT_RUNTIME_DEFINED_IN_CONTAINERS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "PROJECT_RUNTIME_DEFINED_IN_CONTAINERS"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_PROJECT_EXECUTION_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-002",
       "kind": "rule",
       "next": [
         "PLAN OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 255,
       "type": "REQUIRED",
@@ -786,18 +1759,38 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_THROUGH_PROJECT_DOCKER_ENVIRONMENT",
+          "payload": null,
           "text": "RUN_THROUGH_PROJECT_DOCKER_ENVIRONMENT",
           "verb": "RUN_THROUGH_PROJECT_DOCKER_ENVIRONMENT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HOST_TOOL_VERSION_NOT_USED_AS_PROJECT_SOURCE_OF_TRUTH",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HOST_TOOL_VERSION_NOT_USED_AS_PROJECT_SOURCE_OF_TRUTH"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_RUNTIME_TOOL_OR_SERVICE_USED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-003",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 261,
       "type": "REQUIRED",
@@ -807,18 +1800,38 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "USE_PINNED_BASE_IMAGE_VERSION",
+          "payload": null,
           "text": "USE_PINNED_BASE_IMAGE_VERSION",
           "verb": "USE_PINNED_BASE_IMAGE_VERSION"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "RUNTIME_VERSION_REPRODUCIBLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "RUNTIME_VERSION_REPRODUCIBLE"
       ],
+      "condition": {
+        "name": "DOCKER_IMAGE_BUILT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-004",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 267,
       "type": "REQUIRED",
@@ -830,6 +1843,13 @@
           "arguments": [
             "DOCKER_CONFIGURATION"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "UPDATE",
+          "payload": {
+            "name": "DOCKER_CONFIGURATION",
+            "node": "symbol"
+          },
           "text": "UPDATE DOCKER_CONFIGURATION",
           "verb": "UPDATE"
         },
@@ -837,18 +1857,41 @@
           "arguments": [
             "CHANGE_IN_TICKET_PARTICIPANT_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "CHANGE_IN_TICKET_PARTICIPANT_FILE",
+            "node": "symbol"
+          },
           "text": "RECORD CHANGE_IN_TICKET_PARTICIPANT_FILE",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "CONTAINER_ENVIRONMENT_MATCHES_PROJECT_REQUIREMENTS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "CONTAINER_ENVIRONMENT_MATCHES_PROJECT_REQUIREMENTS"
       ],
+      "condition": {
+        "name": "DEPENDENCY_OR_RUNTIME_VERSION_CHANGED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-005",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 273,
       "type": "REQUIRED",
@@ -862,6 +1905,21 @@
             "=",
             "BLOCKED"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "RESULT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "BLOCKED",
+              "node": "symbol"
+            }
+          },
           "text": "SET RESULT = BLOCKED",
           "verb": "SET"
         },
@@ -869,18 +1927,41 @@
           "arguments": [
             "INSTALLATION_OR_STARTUP_REQUIREMENT"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REPORT",
+          "payload": {
+            "name": "INSTALLATION_OR_STARTUP_REQUIREMENT",
+            "node": "symbol"
+          },
           "text": "REPORT INSTALLATION_OR_STARTUP_REQUIREMENT",
           "verb": "REPORT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "LOCAL_FALLBACK_NOT_USED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "LOCAL_FALLBACK_NOT_USED"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_DOCKER_NOT_INSTALLED_OR_ENGINE_NOT_RUNNING",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCKER-006",
       "kind": "rule",
       "next": [
         "BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 280,
       "type": "REQUIRED",
@@ -897,6 +1978,38 @@
             "\"project/governance-check.sh\",",
             "\"project/governance-check.bat\")"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COPY_EXISTING_SCRIPTS_FROM_GOVERNANCE_HUB",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": "project.sh"
+              },
+              {
+                "node": "literal",
+                "value": "project.bat"
+              },
+              {
+                "node": "literal",
+                "value": "project/new-ticket.sh"
+              },
+              {
+                "node": "literal",
+                "value": "project/readme.sh"
+              },
+              {
+                "node": "literal",
+                "value": "project/governance-check.sh"
+              },
+              {
+                "node": "literal",
+                "value": "project/governance-check.bat"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "COPY_EXISTING_SCRIPTS_FROM_GOVERNANCE_HUB (\"project.sh\", \"project.bat\", \"project/new-ticket.sh\", \"project/readme.sh\", \"project/governance-check.sh\", \"project/governance-check.bat\")",
           "verb": "COPY_EXISTING_SCRIPTS_FROM_GOVERNANCE_HUB"
         },
@@ -906,6 +2019,26 @@
             "WITH",
             "FULL_PUBLISHED_SOURCE_REVISION)"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_IMMUTABLE_ADOPTION_GENERATOR",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": "scripts/create_adoption_lock.py"
+              },
+              {
+                "name": "WITH",
+                "node": "symbol"
+              },
+              {
+                "name": "FULL_PUBLISHED_SOURCE_REVISION",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "RUN_IMMUTABLE_ADOPTION_GENERATOR (\"scripts/create_adoption_lock.py\" WITH FULL_PUBLISHED_SOURCE_REVISION)",
           "verb": "RUN_IMMUTABLE_ADOPTION_GENERATOR"
         },
@@ -917,17 +2050,56 @@
             "\".governance/stack-profiles.json\",",
             "\".governance/lock.schema.json\")"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COPY_PINNED_GOVERNANCE_PACKAGE",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": ".governance/manifest.json"
+              },
+              {
+                "node": "literal",
+                "value": ".governance/manifest.lock.json"
+              },
+              {
+                "node": "literal",
+                "value": ".governance/governance_check.py"
+              },
+              {
+                "node": "literal",
+                "value": ".governance/stack-profiles.json"
+              },
+              {
+                "node": "literal",
+                "value": ".governance/lock.schema.json"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "COPY_PINNED_GOVERNANCE_PACKAGE (\".governance/manifest.json\", \".governance/manifest.lock.json\", \".governance/governance_check.py\", \".governance/stack-profiles.json\", \".governance/lock.schema.json\")",
           "verb": "COPY_PINNED_GOVERNANCE_PACKAGE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "SCRIPTS_COPIED_WITHOUT_REGENERATING_FROM_SCRATCH",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "SCRIPTS_COPIED_WITHOUT_REGENERATING_FROM_SCRATCH"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_BOOTSTRAP_INITIATED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-006",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 291,
       "type": "REQUIRED",
       "when": "TARGET_SYSTEM_BOOTSTRAP_INITIATED"
@@ -939,17 +2111,44 @@
             "(\"docs/ARCHITECTURE.md\",",
             "\"docs/LOGIC_FLOW.md\")"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_VISUAL_DIAGRAMS_IN_TARGET_PROJECT_DOCS",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": "docs/ARCHITECTURE.md"
+              },
+              {
+                "node": "literal",
+                "value": "docs/LOGIC_FLOW.md"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "CREATE_VISUAL_DIAGRAMS_IN_TARGET_PROJECT_DOCS (\"docs/ARCHITECTURE.md\", \"docs/LOGIC_FLOW.md\")",
           "verb": "CREATE_VISUAL_DIAGRAMS_IN_TARGET_PROJECT_DOCS"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "VISUAL_DOCUMENTATION_PROVIDED_FOR_HUMANS_AND_AGENTS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "VISUAL_DOCUMENTATION_PROVIDED_FOR_HUMANS_AND_AGENTS"
       ],
+      "condition": {
+        "name": "SYSTEM_DESIGN_OR_FEATURE_PLANNED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DOCS-001",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 298,
       "type": "REQUIRED",
       "when": "SYSTEM_DESIGN_OR_FEATURE_PLANNED"
@@ -958,6 +2157,10 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ_RELEVANT_FILES",
+          "payload": null,
           "text": "READ_RELEVANT_FILES",
           "verb": "READ_RELEVANT_FILES"
         },
@@ -967,6 +2170,13 @@
             "status",
             "--short\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN",
+          "payload": {
+            "node": "literal",
+            "value": "git status --short"
+          },
           "text": "RUN \"git status --short\"",
           "verb": "RUN"
         },
@@ -981,6 +2191,41 @@
             "=",
             "TARGET_SYSTEM_DELIVERY"
           ],
+          "guard": {
+            "left": {
+              "name": "TASK_CONTEXT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "TARGET_SYSTEM_DELIVERY",
+              "node": "symbol"
+            }
+          },
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "items": [
+              {
+                "node": "literal",
+                "value": "docker"
+              },
+              {
+                "left": {
+                  "name": "COMMAND_EXISTS",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "AND",
+                "right": {
+                  "name": "DOCKER_ENGINE_RUNNING",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "VERIFY \"docker\" COMMAND_EXISTS AND DOCKER_ENGINE_RUNNING WHEN TASK_CONTEXT = TARGET_SYSTEM_DELIVERY",
           "verb": "VERIFY"
         },
@@ -992,19 +2237,65 @@
             "=",
             "GOVERNANCE_HUB_MAINTENANCE"
           ],
+          "guard": {
+            "left": {
+              "name": "TASK_CONTEXT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "GOVERNANCE_HUB_MAINTENANCE",
+              "node": "symbol"
+            }
+          },
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "DECLARED_HUB_TEST_ENVIRONMENT",
+            "node": "symbol"
+          },
           "text": "VERIFY DECLARED_HUB_TEST_ENVIRONMENT WHEN TASK_CONTEXT = GOVERNANCE_HUB_MAINTENANCE",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "WORKTREE_STATE_CAPTURED",
+          "node": "symbol"
+        },
+        {
+          "left": {
+            "name": "EXECUTION_ENVIRONMENT_STATUS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": "=",
+          "right": {
+            "name": "VERIFIED_OR_NOT_REQUIRED",
+            "node": "symbol"
+          }
         }
       ],
       "assertions": [
         "WORKTREE_STATE_CAPTURED",
         "EXECUTION_ENVIRONMENT_STATUS = VERIFIED_OR_NOT_REQUIRED"
       ],
+      "condition": {
+        "name": "TASK_RECEIVED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-START-001",
       "kind": "rule",
       "next": [
         "ANALYSIS"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "ANALYSIS"
+        }
       ],
       "sourceLine": 341,
       "type": "REQUIRED",
@@ -1014,18 +2305,38 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "LIMIT_SCOPE_TO_USER_REQUEST",
+          "payload": null,
           "text": "LIMIT_SCOPE_TO_USER_REQUEST",
           "verb": "LIMIT_SCOPE_TO_USER_REQUEST"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "SCOPE_MINIMAL",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "SCOPE_MINIMAL"
       ],
+      "condition": {
+        "name": "TASK_SCOPE_NOT_CLEAR",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-START-002",
       "kind": "rule",
       "next": [
         "ANALYSIS"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "ANALYSIS"
+        }
       ],
       "sourceLine": 351,
       "type": "REQUIRED",
@@ -1040,6 +2351,30 @@
             "AND",
             "PARTICIPANTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "IDENTIFY",
+          "payload": {
+            "items": [
+              {
+                "name": "TICKET_ID",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "OWNER",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "AND",
+                "right": {
+                  "name": "PARTICIPANTS",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "IDENTIFY TICKET_ID OWNER AND PARTICIPANTS",
           "verb": "IDENTIFY"
         },
@@ -1049,6 +2384,26 @@
             "IF",
             "EXISTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ",
+          "payload": {
+            "items": [
+              {
+                "name": "TICKET_INDEX_FILE",
+                "node": "symbol"
+              },
+              {
+                "name": "IF",
+                "node": "symbol"
+              },
+              {
+                "name": "EXISTS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "READ TICKET_INDEX_FILE IF EXISTS",
           "verb": "READ"
         },
@@ -1058,6 +2413,26 @@
             "IF",
             "EXISTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ",
+          "payload": {
+            "items": [
+              {
+                "name": "TICKET_SPEC_FILE",
+                "node": "symbol"
+              },
+              {
+                "name": "IF",
+                "node": "symbol"
+              },
+              {
+                "name": "EXISTS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "READ TICKET_SPEC_FILE IF EXISTS",
           "verb": "READ"
         },
@@ -1067,18 +2442,70 @@
             "IF",
             "EXISTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ",
+          "payload": {
+            "items": [
+              {
+                "name": "RELEVANT_PARTICIPANT_FILES",
+                "node": "symbol"
+              },
+              {
+                "name": "IF",
+                "node": "symbol"
+              },
+              {
+                "name": "EXISTS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "READ RELEVANT_PARTICIPANT_FILES IF EXISTS",
           "verb": "READ"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TICKET_CONTEXT_CAPTURED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TICKET_CONTEXT_CAPTURED"
       ],
+      "condition": {
+        "left": {
+          "left": {
+            "name": "TASK_STEPS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": ">",
+          "right": {
+            "node": "literal",
+            "value": 1
+          }
+        },
+        "node": "binary",
+        "operator": "OR",
+        "right": {
+          "name": "AGENT_REQUIRED",
+          "node": "symbol"
+        }
+      },
       "forbids": [],
       "id": "C-START-003",
       "kind": "rule",
       "next": [
         "ANALYSIS"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "ANALYSIS"
+        }
       ],
       "sourceLine": 357,
       "type": "REQUIRED",
@@ -1088,18 +2515,38 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_IN_CURRENT_FILES_OR_COMMAND_OUTPUT",
+          "payload": null,
           "text": "VERIFY_IN_CURRENT_FILES_OR_COMMAND_OUTPUT",
           "verb": "VERIFY_IN_CURRENT_FILES_OR_COMMAND_OUTPUT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "UNVERIFIED_ITEMS_ARE_LABELLED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "UNVERIFIED_ITEMS_ARE_LABELLED"
       ],
+      "condition": {
+        "name": "CLAIM_OR_TOOL_OR_WORKFLOW_REFERENCED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-ANALYSIS-001",
       "kind": "rule",
       "next": [
         "PLAN"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        }
       ],
       "sourceLine": 370,
       "type": "REQUIRED",
@@ -1113,18 +2560,63 @@
             "FROM",
             "COMMENTED_COMMANDS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "DISTINGUISH",
+          "payload": {
+            "items": [
+              {
+                "name": "ACTIVE_COMMANDS",
+                "node": "symbol"
+              },
+              {
+                "name": "FROM",
+                "node": "symbol"
+              },
+              {
+                "name": "COMMENTED_COMMANDS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "DISTINGUISH ACTIVE_COMMANDS FROM COMMENTED_COMMANDS",
           "verb": "DISTINGUISH"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "COMMENTED_COMMANDS_NOT_USED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "COMMENTED_COMMANDS_NOT_USED"
       ],
+      "condition": {
+        "items": [
+          {
+            "name": "project.sh",
+            "node": "symbol"
+          },
+          {
+            "name": "IS_RELEVANT",
+            "node": "symbol"
+          }
+        ],
+        "node": "sequence"
+      },
       "forbids": [],
       "id": "C-ANALYSIS-002",
       "kind": "rule",
       "next": [
         "PLAN"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        }
       ],
       "sourceLine": 376,
       "type": "REQUIRED",
@@ -1138,18 +2630,54 @@
             "AS",
             "UNVERIFIED"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "MARK",
+          "payload": {
+            "items": [
+              {
+                "name": "FEATURE",
+                "node": "symbol"
+              },
+              {
+                "name": "AS",
+                "node": "symbol"
+              },
+              {
+                "name": "UNVERIFIED",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "MARK FEATURE AS UNVERIFIED",
           "verb": "MARK"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "FEATURE_NOT_PRESENTED_AS_AVAILABLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "FEATURE_NOT_PRESENTED_AS_AVAILABLE"
       ],
+      "condition": {
+        "name": "REPOSITORY_FEATURE_NOT_FOUND",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-ANALYSIS-003",
       "kind": "rule",
       "next": [
         "PLAN"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        }
       ],
       "sourceLine": 382,
       "type": "REQUIRED",
@@ -1161,6 +2689,13 @@
           "arguments": [
             "DOCKER_CONFIGURATION"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "DOCKER_CONFIGURATION",
+            "node": "symbol"
+          },
           "text": "VERIFY DOCKER_CONFIGURATION",
           "verb": "VERIFY"
         },
@@ -1168,18 +2703,45 @@
           "arguments": [
             "REQUIRED_SERVICES_DEFINED"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "name": "REQUIRED_SERVICES_DEFINED",
+            "node": "symbol"
+          },
           "text": "VERIFY REQUIRED_SERVICES_DEFINED",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "EXECUTION_ENVIRONMENT_REPRODUCIBLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "EXECUTION_ENVIRONMENT_REPRODUCIBLE"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_EXECUTION_OR_TESTS_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-ANALYSIS-004",
       "kind": "rule",
       "next": [
         "PLAN OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 388,
       "type": "REQUIRED",
@@ -1189,18 +2751,54 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "KEEP_PLAN_INLINE",
+          "payload": null,
           "text": "KEEP_PLAN_INLINE",
           "verb": "KEEP_PLAN_INLINE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TODO_NOT_REQUIRED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TODO_NOT_REQUIRED"
       ],
+      "condition": {
+        "left": {
+          "left": {
+            "name": "TASK_STEPS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": "<=",
+          "right": {
+            "node": "literal",
+            "value": 1
+          }
+        },
+        "node": "binary",
+        "operator": "AND",
+        "right": {
+          "name": "AGENT_NOT_REQUIRED",
+          "node": "symbol"
+        }
+      },
       "forbids": [],
       "id": "C-PLAN-001",
       "kind": "rule",
       "next": [
         "TOOLS"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "TOOLS"
+        }
       ],
       "sourceLine": 399,
       "type": "REQUIRED",
@@ -1212,6 +2810,13 @@
           "arguments": [
             "\"TODO.md\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "node": "literal",
+            "value": "TODO.md"
+          },
           "text": "CREATE_OR_UPDATE \"TODO.md\"",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -1219,6 +2824,13 @@
           "arguments": [
             "TICKET_DIRECTORY_PATTERN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_DIRECTORY_PATTERN",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_DIRECTORY_PATTERN",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -1226,6 +2838,13 @@
           "arguments": [
             "TICKET_SPEC_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_SPEC_FILE",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_SPEC_FILE",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -1233,6 +2852,13 @@
           "arguments": [
             "TICKET_INDEX_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "TICKET_INDEX_FILE",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE TICKET_INDEX_FILE",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -1243,19 +2869,79 @@
             "ACCEPTANCE_CRITERIA",
             "STATUS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "items": [
+              {
+                "name": "SCOPE",
+                "node": "symbol"
+              },
+              {
+                "name": "RISKS",
+                "node": "symbol"
+              },
+              {
+                "name": "ACCEPTANCE_CRITERIA",
+                "node": "symbol"
+              },
+              {
+                "name": "STATUS",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "RECORD SCOPE RISKS ACCEPTANCE_CRITERIA STATUS",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TODO_CONTAINS_PROJECT_LEVEL_WORK_TRACKING",
+          "node": "symbol"
+        },
+        {
+          "name": "TICKET_SPEC_FILE_CONTAINS_ASSIGNED_SCOPE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TODO_CONTAINS_PROJECT_LEVEL_WORK_TRACKING",
         "TICKET_SPEC_FILE_CONTAINS_ASSIGNED_SCOPE"
       ],
+      "condition": {
+        "left": {
+          "left": {
+            "name": "TASK_STEPS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": ">",
+          "right": {
+            "node": "literal",
+            "value": 1
+          }
+        },
+        "node": "binary",
+        "operator": "OR",
+        "right": {
+          "name": "AGENT_REQUIRED",
+          "node": "symbol"
+        }
+      },
       "forbids": [],
       "id": "C-PLAN-002",
       "kind": "rule",
       "next": [
         "WAIT_FOR_APPROVAL"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "WAIT_FOR_APPROVAL"
+        }
       ],
       "sourceLine": 405,
       "type": "REQUIRED",
@@ -1267,18 +2953,41 @@
           "arguments": [
             "RISK_AND_CHECKS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "RISK_AND_CHECKS",
+            "node": "symbol"
+          },
           "text": "RECORD RISK_AND_CHECKS",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "RISK_VISIBLE_BEFORE_EDIT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "RISK_VISIBLE_BEFORE_EDIT"
       ],
+      "condition": {
+        "name": "CHANGE_RISK_HIGH",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-PLAN-003",
       "kind": "rule",
       "next": [
         "WAIT_FOR_APPROVAL"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "WAIT_FOR_APPROVAL"
+        }
       ],
       "sourceLine": 416,
       "type": "REQUIRED",
@@ -1290,6 +2999,13 @@
           "arguments": [
             "OWNED_PARTICIPANT_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_OR_UPDATE",
+          "payload": {
+            "name": "OWNED_PARTICIPANT_FILE",
+            "node": "symbol"
+          },
           "text": "CREATE_OR_UPDATE OWNED_PARTICIPANT_FILE",
           "verb": "CREATE_OR_UPDATE"
         },
@@ -1300,16 +3016,54 @@
             "AND",
             "IMPLEMENTATION_PLAN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "items": [
+              {
+                "name": "ROLE",
+                "node": "symbol"
+              },
+              {
+                "left": {
+                  "name": "INSTRUCTIONS",
+                  "node": "symbol"
+                },
+                "node": "binary",
+                "operator": "AND",
+                "right": {
+                  "name": "IMPLEMENTATION_PLAN",
+                  "node": "symbol"
+                }
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "RECORD ROLE INSTRUCTIONS AND IMPLEMENTATION_PLAN",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "IMPLEMENTATION_PLAN_DOES_NOT_REDEFINE_TICKET_SCOPE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "IMPLEMENTATION_PLAN_DOES_NOT_REDEFINE_TICKET_SCOPE"
       ],
+      "condition": {
+        "name": "PARTICIPANT_ASSIGNED",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "AGENT_WRITE_HUMAN_PARTICIPANT_FILE",
+          "payload": null,
           "text": "AGENT_WRITE_HUMAN_PARTICIPANT_FILE",
           "verb": "AGENT_WRITE_HUMAN_PARTICIPANT_FILE"
         }
@@ -1318,6 +3072,12 @@
       "kind": "rule",
       "next": [
         "WAIT_FOR_APPROVAL"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "WAIT_FOR_APPROVAL"
+        }
       ],
       "sourceLine": 422,
       "type": "REQUIRED",
@@ -1333,6 +3093,29 @@
             "AND",
             "TICKET_INTENT_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "PRESENT",
+          "payload": {
+            "left": {
+              "left": {
+                "node": "literal",
+                "value": "project/ticket-{NNN}/ai-{PROVIDER}.md"
+              },
+              "node": "binary",
+              "operator": "AND",
+              "right": {
+                "node": "literal",
+                "value": "TODO.md"
+              }
+            },
+            "node": "binary",
+            "operator": "AND",
+            "right": {
+              "name": "TICKET_INTENT_FILE",
+              "node": "symbol"
+            }
+          },
           "text": "PRESENT \"project/ticket-{NNN}/ai-{PROVIDER}.md\" AND \"TODO.md\" AND TICKET_INTENT_FILE",
           "verb": "PRESENT"
         },
@@ -1340,18 +3123,50 @@
           "arguments": [
             "IMPLEMENTATION_FILE_CHANGE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "FORBID",
+          "payload": {
+            "name": "IMPLEMENTATION_FILE_CHANGE",
+            "node": "symbol"
+          },
           "text": "FORBID IMPLEMENTATION_FILE_CHANGE",
           "verb": "FORBID"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "USER_CAN_REVIEW_UNDERSTANDING_CHECKLIST_AND_MACHINE_SCOPE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "USER_CAN_REVIEW_UNDERSTANDING_CHECKLIST_AND_MACHINE_SCOPE"
       ],
+      "condition": {
+        "items": [
+          {
+            "name": "ENTER",
+            "node": "symbol"
+          },
+          {
+            "name": "WAIT_FOR_APPROVAL",
+            "node": "symbol"
+          }
+        ],
+        "node": "sequence"
+      },
       "forbids": [],
       "id": "C-APPROVAL-001",
       "kind": "rule",
       "next": [
         "WAIT_FOR_APPROVAL"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "WAIT_FOR_APPROVAL"
+        }
       ],
       "sourceLine": 434,
       "type": "REQUIRED",
@@ -1361,16 +3176,34 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD_SESSION_AUTHORIZATION_IN_AGENT_OWNED_FILE",
+          "payload": null,
           "text": "RECORD_SESSION_AUTHORIZATION_IN_AGENT_OWNED_FILE",
           "verb": "RECORD_SESSION_AUTHORIZATION_IN_AGENT_OWNED_FILE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "IMPLEMENTATION_MAY_START_WITHIN_APPROVED_INTENT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "IMPLEMENTATION_MAY_START_WITHIN_APPROVED_INTENT"
       ],
+      "condition": {
+        "name": "EXPLICIT_INTERACTIVE_APPROVAL_RECEIVED",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "TREAT_SESSION_AUTHORIZATION_AS_TRUSTED_MERGE_APPROVAL",
+          "payload": null,
           "text": "TREAT_SESSION_AUTHORIZATION_AS_TRUSTED_MERGE_APPROVAL",
           "verb": "TREAT_SESSION_AUTHORIZATION_AS_TRUSTED_MERGE_APPROVAL"
         }
@@ -1380,6 +3213,12 @@
       "next": [
         "TOOLS"
       ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "TOOLS"
+        }
+      ],
       "sourceLine": 441,
       "type": "REQUIRED",
       "when": "EXPLICIT_INTERACTIVE_APPROVAL_RECEIVED"
@@ -1388,6 +3227,10 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "INVALIDATE_INTERACTIVE_APPROVAL",
+          "payload": null,
           "text": "INVALIDATE_INTERACTIVE_APPROVAL",
           "verb": "INVALIDATE_INTERACTIVE_APPROVAL"
         },
@@ -1395,18 +3238,41 @@
           "arguments": [
             "PLAN"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RETURN_TO",
+          "payload": {
+            "name": "PLAN",
+            "node": "symbol"
+          },
           "text": "RETURN_TO PLAN",
           "verb": "RETURN_TO"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "FRESH_USER_REVIEW_REQUIRED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "FRESH_USER_REVIEW_REQUIRED"
       ],
+      "condition": {
+        "name": "TICKET_SCOPE_OR_INTENT_CHANGED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-APPROVAL-003",
       "kind": "rule",
       "next": [
         "PLAN"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PLAN"
+        }
       ],
       "sourceLine": 448,
       "type": "REQUIRED",
@@ -1420,18 +3286,66 @@
             "AND",
             "INVOCATION_EXISTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "left": {
+              "name": "TOOL_EXISTS",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "AND",
+            "right": {
+              "name": "INVOCATION_EXISTS",
+              "node": "symbol"
+            }
+          },
           "text": "VERIFY TOOL_EXISTS AND INVOCATION_EXISTS",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "left": {
+            "name": "TOOL_STATUS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": "IN",
+          "right": {
+            "items": [
+              {
+                "name": "VERIFIED",
+                "node": "symbol"
+              },
+              {
+                "name": "UNVERIFIED",
+                "node": "symbol"
+              }
+            ],
+            "node": "list"
+          }
         }
       ],
       "assertions": [
         "TOOL_STATUS IN [VERIFIED, UNVERIFIED]"
       ],
+      "condition": {
+        "name": "TOOL_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-001",
       "kind": "rule",
       "next": [
         "DELEGATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        }
       ],
       "sourceLine": 459,
       "type": "REQUIRED",
@@ -1445,18 +3359,49 @@
             "=",
             "INSTALL_ONLY"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SET",
+          "payload": {
+            "left": {
+              "name": "TOOL_STATUS",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "INSTALL_ONLY",
+              "node": "symbol"
+            }
+          },
           "text": "SET TOOL_STATUS = INSTALL_ONLY",
           "verb": "SET"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TOOL_NOT_PRESENTED_AS_AVAILABLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TOOL_NOT_PRESENTED_AS_AVAILABLE"
       ],
+      "condition": {
+        "name": "PACKAGE_INSTALLED_AND_COMMAND_NOT_INVOKED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-002",
       "kind": "rule",
       "next": [
         "DELEGATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        }
       ],
       "sourceLine": 465,
       "type": "REQUIRED",
@@ -1468,18 +3413,41 @@
           "arguments": [
             "\"project.sh\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SKIP",
+          "payload": {
+            "node": "literal",
+            "value": "project.sh"
+          },
           "text": "SKIP \"project.sh\"",
           "verb": "SKIP"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "INSTALL_OR_OVERWRITE_NOT_REQUIRED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "INSTALL_OR_OVERWRITE_NOT_REQUIRED"
       ],
+      "condition": {
+        "name": "DOCUMENTATION_ONLY_CHANGE",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-003",
       "kind": "rule",
       "next": [
         "DELEGATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        }
       ],
       "sourceLine": 471,
       "type": "REQUIRED",
@@ -1491,18 +3459,45 @@
           "arguments": [
             "DOCKER_COMPOSE_OR_DOCUMENTED_DOCKER_COMMAND"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "USE",
+          "payload": {
+            "name": "DOCKER_COMPOSE_OR_DOCUMENTED_DOCKER_COMMAND",
+            "node": "symbol"
+          },
           "text": "USE DOCKER_COMPOSE_OR_DOCUMENTED_DOCKER_COMMAND",
           "verb": "USE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "COMMAND_EXECUTED_IN_PROJECT_CONTAINER",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "COMMAND_EXECUTED_IN_PROJECT_CONTAINER"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_PROJECT_COMMAND_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-004",
       "kind": "rule",
       "next": [
         "DELEGATION OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 477,
       "type": "REQUIRED",
@@ -1516,6 +3511,21 @@
             "OR",
             "\"project.bat\")"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_DETERMINISTIC_GOVERNANCE_GATE",
+          "payload": {
+            "left": {
+              "node": "literal",
+              "value": "./project.sh"
+            },
+            "node": "binary",
+            "operator": "OR",
+            "right": {
+              "node": "literal",
+              "value": "project.bat"
+            }
+          },
           "text": "RUN_DETERMINISTIC_GOVERNANCE_GATE (\"./project.sh\" OR \"project.bat\")",
           "verb": "RUN_DETERMINISTIC_GOVERNANCE_GATE"
         },
@@ -1524,6 +3534,13 @@
             "WHEN",
             "DIGEST_PINNED_IMAGE_CONFIGURED"
           ],
+          "guard": {
+            "name": "DIGEST_PINNED_IMAGE_CONFIGURED",
+            "node": "symbol"
+          },
+          "kind": "action",
+          "opcode": "RUN_ANALYSIS_IMAGE",
+          "payload": null,
           "text": "RUN_ANALYSIS_IMAGE WHEN DIGEST_PINNED_IMAGE_CONFIGURED",
           "verb": "RUN_ANALYSIS_IMAGE"
         },
@@ -1532,18 +3549,41 @@
             "WHEN",
             "REPORT_GENERATED"
           ],
+          "guard": {
+            "name": "REPORT_GENERATED",
+            "node": "symbol"
+          },
+          "kind": "action",
+          "opcode": "READ_GENERATED_REPORT_FROM_PROJECT_DIR",
+          "payload": null,
           "text": "READ_GENERATED_REPORT_FROM_PROJECT_DIR WHEN REPORT_GENERATED",
           "verb": "READ_GENERATED_REPORT_FROM_PROJECT_DIR"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "GOVERNANCE_GATE_PRECEDES_OPTIONAL_ANALYSIS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "GOVERNANCE_GATE_PRECEDES_OPTIONAL_ANALYSIS"
       ],
+      "condition": {
+        "name": "AGENT_WORKS_ON_TARGET_SYSTEM_ANALYSIS_OR_REFACTOR",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-TOOLS-005",
       "kind": "rule",
       "next": [
         "DELEGATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        }
       ],
       "sourceLine": 483,
       "type": "REQUIRED",
@@ -1553,21 +3593,43 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE_ACTIVE_MAINTENANCE_TICKET_AND_VALID_INTENT",
+          "payload": null,
           "text": "REQUIRE_ACTIVE_MAINTENANCE_TICKET_AND_VALID_INTENT",
           "verb": "REQUIRE_ACTIVE_MAINTENANCE_TICKET_AND_VALID_INTENT"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_HUB_TEST_CONTRACT_IN_DECLARED_CI_OR_CONTAINER_ENVIRONMENT",
+          "payload": null,
           "text": "RUN_HUB_TEST_CONTRACT_IN_DECLARED_CI_OR_CONTAINER_ENVIRONMENT",
           "verb": "RUN_HUB_TEST_CONTRACT_IN_DECLARED_CI_OR_CONTAINER_ENVIRONMENT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUB_MAINTENANCE_DOES_NOT_IMPERSONATE_TARGET_REPOSITORY",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUB_MAINTENANCE_DOES_NOT_IMPERSONATE_TARGET_REPOSITORY"
       ],
+      "condition": {
+        "name": "AGENT_WORKS_ON_GOVERNANCE_HUB_ANALYSIS_OR_REFACTOR",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE_TARGET_ADOPTION_MANIFEST_AT_HUB_ROOT",
+          "payload": null,
           "text": "REQUIRE_TARGET_ADOPTION_MANIFEST_AT_HUB_ROOT",
           "verb": "REQUIRE_TARGET_ADOPTION_MANIFEST_AT_HUB_ROOT"
         }
@@ -1576,6 +3638,12 @@
       "kind": "rule",
       "next": [
         "DELEGATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DELEGATION"
+        }
       ],
       "sourceLine": 491,
       "type": "REQUIRED",
@@ -1589,18 +3657,66 @@
             "AND",
             "AGENT_INVOCATION"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "left": {
+              "name": "AGENT_DEFINITION",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "AND",
+            "right": {
+              "name": "AGENT_INVOCATION",
+              "node": "symbol"
+            }
+          },
           "text": "VERIFY AGENT_DEFINITION AND AGENT_INVOCATION",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "left": {
+            "name": "AGENT_STATUS",
+            "node": "symbol"
+          },
+          "node": "binary",
+          "operator": "IN",
+          "right": {
+            "items": [
+              {
+                "name": "VERIFIED",
+                "node": "symbol"
+              },
+              {
+                "name": "UNVERIFIED",
+                "node": "symbol"
+              }
+            ],
+            "node": "list"
+          }
         }
       ],
       "assertions": [
         "AGENT_STATUS IN [VERIFIED, UNVERIFIED]"
       ],
+      "condition": {
+        "name": "AGENT_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DELEGATION-001",
       "kind": "rule",
       "next": [
         "EDIT"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "EDIT"
+        }
       ],
       "sourceLine": 503,
       "type": "REQUIRED",
@@ -1610,18 +3726,50 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "USE_LOCAL_WORKFLOW_OR_REPORT_BLOCKER",
+          "payload": null,
           "text": "USE_LOCAL_WORKFLOW_OR_REPORT_BLOCKER",
           "verb": "USE_LOCAL_WORKFLOW_OR_REPORT_BLOCKER"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "UNVERIFIED_AGENT_NOT_USED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "UNVERIFIED_AGENT_NOT_USED"
       ],
+      "condition": {
+        "left": {
+          "name": "AGENT_STATUS",
+          "node": "symbol"
+        },
+        "node": "binary",
+        "operator": "=",
+        "right": {
+          "name": "UNVERIFIED",
+          "node": "symbol"
+        }
+      },
       "forbids": [],
       "id": "C-DELEGATION-002",
       "kind": "rule",
       "next": [
         "EDIT OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "EDIT"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 509,
       "type": "REQUIRED",
@@ -1633,6 +3781,13 @@
           "arguments": [
             "TICKET_SPEC_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "TICKET_SPEC_FILE",
+            "node": "symbol"
+          },
           "text": "REQUIRE TICKET_SPEC_FILE",
           "verb": "REQUIRE"
         },
@@ -1640,6 +3795,13 @@
           "arguments": [
             "ASSIGNED_AGENT_PARTICIPANT_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "ASSIGNED_AGENT_PARTICIPANT_FILE",
+            "node": "symbol"
+          },
           "text": "REQUIRE ASSIGNED_AGENT_PARTICIPANT_FILE",
           "verb": "REQUIRE"
         },
@@ -1647,18 +3809,41 @@
           "arguments": [
             "MATERIAL_AGENT_INSTRUCTIONS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "MATERIAL_AGENT_INSTRUCTIONS",
+            "node": "symbol"
+          },
           "text": "RECORD MATERIAL_AGENT_INSTRUCTIONS",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "AGENT_INSTRUCTIONS_REFERENCE_TICKET",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "AGENT_INSTRUCTIONS_REFERENCE_TICKET"
       ],
+      "condition": {
+        "name": "AGENT_REQUIRED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DELEGATION-003",
       "kind": "rule",
       "next": [
         "EDIT"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "EDIT"
+        }
       ],
       "sourceLine": 515,
       "type": "REQUIRED",
@@ -1668,23 +3853,47 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "PASS_MINIMAL_TRIMMED_CONTEXT",
+          "payload": null,
           "text": "PASS_MINIMAL_TRIMMED_CONTEXT",
           "verb": "PASS_MINIMAL_TRIMMED_CONTEXT"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_SUBAGENT_OUTPUT_IN_PARENT",
+          "payload": null,
           "text": "VERIFY_SUBAGENT_OUTPUT_IN_PARENT",
           "verb": "VERIFY_SUBAGENT_OUTPUT_IN_PARENT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "SUBAGENT_RESULT_VALIDATED_BEFORE_MERGE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "SUBAGENT_RESULT_VALIDATED_BEFORE_MERGE"
       ],
+      "condition": {
+        "name": "DELEGATING_TO_SUBAGENT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-DELEGATION-004",
       "kind": "rule",
       "next": [
         "EDIT"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "EDIT"
+        }
       ],
       "sourceLine": 523,
       "type": "REQUIRED",
@@ -1696,23 +3905,50 @@
           "arguments": [
             "TARGET_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "READ",
+          "payload": {
+            "name": "TARGET_FILE",
+            "node": "symbol"
+          },
           "text": "READ TARGET_FILE",
           "verb": "READ"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "MODIFY_ONLY_REQUESTED_SCOPE",
+          "payload": null,
           "text": "MODIFY_ONLY_REQUESTED_SCOPE",
           "verb": "MODIFY_ONLY_REQUESTED_SCOPE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "EXISTING_MEANING_PRESERVED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "EXISTING_MEANING_PRESERVED"
       ],
+      "condition": {
+        "name": "TARGET_FILE_EXISTS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-EDIT-001",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 534,
       "type": "REQUIRED",
@@ -1722,23 +3958,47 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_PARENT_DIRECTORY",
+          "payload": null,
           "text": "VERIFY_PARENT_DIRECTORY",
           "verb": "VERIFY_PARENT_DIRECTORY"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CREATE_ONLY_IF_REQUIRED_BY_TASK",
+          "payload": null,
           "text": "CREATE_ONLY_IF_REQUIRED_BY_TASK",
           "verb": "CREATE_ONLY_IF_REQUIRED_BY_TASK"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "NEW_FILE_JUSTIFIED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "NEW_FILE_JUSTIFIED"
       ],
+      "condition": {
+        "name": "TARGET_FILE_MISSING",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-EDIT-002",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 541,
       "type": "REQUIRED",
@@ -1748,23 +4008,47 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "KEEP_TERMS_CONSISTENT",
+          "payload": null,
           "text": "KEEP_TERMS_CONSISTENT",
           "verb": "KEEP_TERMS_CONSISTENT"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REMOVE_DUPLICATION",
+          "payload": null,
           "text": "REMOVE_DUPLICATION",
           "verb": "REMOVE_DUPLICATION"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "DOCUMENTATION_SHORTER_OR_CLEARER",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "DOCUMENTATION_SHORTER_OR_CLEARER"
       ],
+      "condition": {
+        "name": "DOCUMENTATION_CHANGED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-EDIT-003",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 548,
       "type": "REQUIRED",
@@ -1776,6 +4060,13 @@
           "arguments": [
             "CURRENT_ACTOR_OWNED_PARTICIPANT_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "UPDATE",
+          "payload": {
+            "name": "CURRENT_ACTOR_OWNED_PARTICIPANT_FILE",
+            "node": "symbol"
+          },
           "text": "UPDATE CURRENT_ACTOR_OWNED_PARTICIPANT_FILE",
           "verb": "UPDATE"
         },
@@ -1783,6 +4074,13 @@
           "arguments": [
             "ACTUAL_CHANGES"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "ACTUAL_CHANGES",
+            "node": "symbol"
+          },
           "text": "RECORD ACTUAL_CHANGES",
           "verb": "RECORD"
         },
@@ -1790,6 +4088,13 @@
           "arguments": [
             "UNFINISHED_ITEMS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "UNFINISHED_ITEMS",
+            "node": "symbol"
+          },
           "text": "RECORD UNFINISHED_ITEMS",
           "verb": "RECORD"
         },
@@ -1797,16 +4102,37 @@
           "arguments": [
             "BLOCKERS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "BLOCKERS",
+            "node": "symbol"
+          },
           "text": "RECORD BLOCKERS",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "EXECUTION_STATE_VISIBLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "EXECUTION_STATE_VISIBLE"
       ],
+      "condition": {
+        "name": "TICKET_USED",
+        "node": "symbol"
+      },
       "forbids": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "AGENT_UPDATE_HUMAN_PARTICIPANT_FILE",
+          "payload": null,
           "text": "AGENT_UPDATE_HUMAN_PARTICIPANT_FILE",
           "verb": "AGENT_UPDATE_HUMAN_PARTICIPANT_FILE"
         }
@@ -1815,6 +4141,12 @@
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 555,
       "type": "REQUIRED",
@@ -1827,18 +4159,50 @@
             "RAW_OUTPUT_TO",
             "TICKET_LOG_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "APPEND",
+          "payload": {
+            "items": [
+              {
+                "name": "RAW_OUTPUT_TO",
+                "node": "symbol"
+              },
+              {
+                "name": "TICKET_LOG_FILE",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "APPEND RAW_OUTPUT_TO TICKET_LOG_FILE",
           "verb": "APPEND"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "LOG_OUTPUT_NOT_REPLACED_BY_SUMMARY",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "LOG_OUTPUT_NOT_REPLACED_BY_SUMMARY"
       ],
+      "condition": {
+        "name": "COMMAND_OUTPUT_OR_TEST_OUTPUT_EXISTS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-EDIT-005",
       "kind": "rule",
       "next": [
         "VALIDATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "VALIDATION"
+        }
       ],
       "sourceLine": 565,
       "type": "REQUIRED",
@@ -1848,33 +4212,65 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REVIEW_DIFF",
+          "payload": null,
           "text": "REVIEW_DIFF",
           "verb": "REVIEW_DIFF"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CHECK_FORMAT",
+          "payload": null,
           "text": "CHECK_FORMAT",
           "verb": "CHECK_FORMAT"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CHECK_REFERENCES",
+          "payload": null,
           "text": "CHECK_REFERENCES",
           "verb": "CHECK_REFERENCES"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "CHECK_SECRETS",
+          "payload": null,
           "text": "CHECK_SECRETS",
           "verb": "CHECK_SECRETS"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "CHANGE_REVIEWED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "CHANGE_REVIEWED"
       ],
+      "condition": {
+        "name": "CHANGE_COMPLETE",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-001",
       "kind": "rule",
       "next": [
         "PUBLICATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        }
       ],
       "sourceLine": 575,
       "type": "REQUIRED",
@@ -1884,6 +4280,10 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_RELEVANT_TESTS_IN_DECLARED_REPOSITORY_ENVIRONMENT",
+          "payload": null,
           "text": "RUN_RELEVANT_TESTS_IN_DECLARED_REPOSITORY_ENVIRONMENT",
           "verb": "RUN_RELEVANT_TESTS_IN_DECLARED_REPOSITORY_ENVIRONMENT"
         },
@@ -1893,6 +4293,21 @@
             "=",
             "TARGET_SYSTEM_DELIVERY"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE_DOCKER_WHEN",
+          "payload": {
+            "left": {
+              "name": "TASK_CONTEXT",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "=",
+            "right": {
+              "name": "TARGET_SYSTEM_DELIVERY",
+              "node": "symbol"
+            }
+          },
           "text": "REQUIRE_DOCKER_WHEN TASK_CONTEXT = TARGET_SYSTEM_DELIVERY",
           "verb": "REQUIRE_DOCKER_WHEN"
         },
@@ -1901,19 +4316,55 @@
             "RAW_TEST_OUTPUT_TO",
             "TICKET_LOG_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "APPEND",
+          "payload": {
+            "items": [
+              {
+                "name": "RAW_TEST_OUTPUT_TO",
+                "node": "symbol"
+              },
+              {
+                "name": "TICKET_LOG_FILE",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "APPEND RAW_TEST_OUTPUT_TO TICKET_LOG_FILE",
           "verb": "APPEND"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TEST_RESULT_REPORTED",
+          "node": "symbol"
+        },
+        {
+          "name": "DECLARED_REPOSITORY_ENVIRONMENT_USED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TEST_RESULT_REPORTED",
         "DECLARED_REPOSITORY_ENVIRONMENT_USED"
       ],
+      "condition": {
+        "name": "TESTS_EXIST_AND_RELEVANT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-002",
       "kind": "rule",
       "next": [
         "PUBLICATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        }
       ],
       "sourceLine": 584,
       "type": "REQUIRED",
@@ -1925,18 +4376,41 @@
           "arguments": [
             "TESTS_NOT_RUN_WITH_REASON"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REPORT",
+          "payload": {
+            "name": "TESTS_NOT_RUN_WITH_REASON",
+            "node": "symbol"
+          },
           "text": "REPORT TESTS_NOT_RUN_WITH_REASON",
           "verb": "REPORT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TEST_SUCCESS_NOT_CLAIMED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TEST_SUCCESS_NOT_CLAIMED"
       ],
+      "condition": {
+        "name": "TESTS_NOT_FOUND_OR_NOT_RELEVANT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-003",
       "kind": "rule",
       "next": [
         "PUBLICATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        }
       ],
       "sourceLine": 593,
       "type": "REQUIRED",
@@ -1948,6 +4422,13 @@
           "arguments": [
             "TICKET_SPEC_FILE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COMPARE",
+          "payload": {
+            "name": "TICKET_SPEC_FILE",
+            "node": "symbol"
+          },
           "text": "COMPARE TICKET_SPEC_FILE",
           "verb": "COMPARE"
         },
@@ -1955,6 +4436,13 @@
           "arguments": [
             "PARTICIPANT_FILES"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COMPARE",
+          "payload": {
+            "name": "PARTICIPANT_FILES",
+            "node": "symbol"
+          },
           "text": "COMPARE PARTICIPANT_FILES",
           "verb": "COMPARE"
         },
@@ -1962,6 +4450,13 @@
           "arguments": [
             "CURRENT_DIFF"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COMPARE",
+          "payload": {
+            "name": "CURRENT_DIFF",
+            "node": "symbol"
+          },
           "text": "COMPARE CURRENT_DIFF",
           "verb": "COMPARE"
         },
@@ -1969,6 +4464,13 @@
           "arguments": [
             "TEST_RESULTS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COMPARE",
+          "payload": {
+            "name": "TEST_RESULTS",
+            "node": "symbol"
+          },
           "text": "COMPARE TEST_RESULTS",
           "verb": "COMPARE"
         },
@@ -1976,18 +4478,41 @@
           "arguments": [
             "ACCEPTANCE_CRITERIA_EVIDENCE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RECORD",
+          "payload": {
+            "name": "ACCEPTANCE_CRITERIA_EVIDENCE",
+            "node": "symbol"
+          },
           "text": "RECORD ACCEPTANCE_CRITERIA_EVIDENCE",
           "verb": "RECORD"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "COMPLETED_AND_UNFINISHED_SCOPE_VISIBLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "COMPLETED_AND_UNFINISHED_SCOPE_VISIBLE"
       ],
+      "condition": {
+        "name": "TICKET_USED",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-004",
       "kind": "rule",
       "next": [
         "PUBLICATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        }
       ],
       "sourceLine": 599,
       "type": "REQUIRED",
@@ -1999,6 +4524,13 @@
           "arguments": [
             "CONTAINER_BUILD"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VALIDATE",
+          "payload": {
+            "name": "CONTAINER_BUILD",
+            "node": "symbol"
+          },
           "text": "VALIDATE CONTAINER_BUILD",
           "verb": "VALIDATE"
         },
@@ -2006,18 +4538,41 @@
           "arguments": [
             "REQUIRED_SERVICES_START"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VALIDATE",
+          "payload": {
+            "name": "REQUIRED_SERVICES_START",
+            "node": "symbol"
+          },
           "text": "VALIDATE REQUIRED_SERVICES_START",
           "verb": "VALIDATE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "DOCKER_ENVIRONMENT_OPERATIONAL",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "DOCKER_ENVIRONMENT_OPERATIONAL"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_DOCKER_CONFIGURATION_EXISTS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-005",
       "kind": "rule",
       "next": [
         "PUBLICATION"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        }
       ],
       "sourceLine": 609,
       "type": "REQUIRED",
@@ -2029,6 +4584,13 @@
           "arguments": [
             "DETERMINISTIC_GOVERNANCE_GATE"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN",
+          "payload": {
+            "name": "DETERMINISTIC_GOVERNANCE_GATE",
+            "node": "symbol"
+          },
           "text": "RUN DETERMINISTIC_GOVERNANCE_GATE",
           "verb": "RUN"
         },
@@ -2038,6 +4600,21 @@
             "AND",
             "ZERO_ERRORS"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "left": {
+              "name": "STABLE_GOV_CODES",
+              "node": "symbol"
+            },
+            "node": "binary",
+            "operator": "AND",
+            "right": {
+              "name": "ZERO_ERRORS",
+              "node": "symbol"
+            }
+          },
           "text": "REQUIRE STABLE_GOV_CODES AND ZERO_ERRORS",
           "verb": "REQUIRE"
         },
@@ -2049,18 +4626,66 @@
             "APPROVAL_PROVENANCE",
             "MANIFEST_LOCK"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY",
+          "payload": {
+            "items": [
+              {
+                "name": "ACTIVE_TICKET",
+                "node": "symbol"
+              },
+              {
+                "name": "INTENT_SCOPE",
+                "node": "symbol"
+              },
+              {
+                "name": "OWNERSHIP",
+                "node": "symbol"
+              },
+              {
+                "name": "APPROVAL_PROVENANCE",
+                "node": "symbol"
+              },
+              {
+                "name": "MANIFEST_LOCK",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "VERIFY ACTIVE_TICKET INTENT_SCOPE OWNERSHIP APPROVAL_PROVENANCE MANIFEST_LOCK",
           "verb": "VERIFY"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "REQUIRED_GATE_DOES_NOT_DEPEND_ON_LLM_PROVIDER",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "REQUIRED_GATE_DOES_NOT_DEPEND_ON_LLM_PROVIDER"
       ],
+      "condition": {
+        "name": "TARGET_SYSTEM_IMPLEMENTATION_DIFF_EXISTS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-006",
       "kind": "rule",
       "next": [
         "PUBLICATION OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 616,
       "type": "REQUIRED",
@@ -2070,28 +4695,60 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "VERIFY_SINGLE_ACTIVE_MAINTENANCE_TICKET_AND_INTENT_SCOPE",
+          "payload": null,
           "text": "VERIFY_SINGLE_ACTIVE_MAINTENANCE_TICKET_AND_INTENT_SCOPE",
           "verb": "VERIFY_SINGLE_ACTIVE_MAINTENANCE_TICKET_AND_INTENT_SCOPE"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_HUB_TEST_CONTRACT",
+          "payload": null,
           "text": "RUN_HUB_TEST_CONTRACT",
           "verb": "RUN_HUB_TEST_CONTRACT"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REVIEW_DIFF_AND_STABLE_RULE_IDENTIFIERS",
+          "payload": null,
           "text": "REVIEW_DIFF_AND_STABLE_RULE_IDENTIFIERS",
           "verb": "REVIEW_DIFF_AND_STABLE_RULE_IDENTIFIERS"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "HUB_CHANGE_IS_SCOPED_TESTED_AND_AUDITABLE",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "HUB_CHANGE_IS_SCOPED_TESTED_AND_AUDITABLE"
       ],
+      "condition": {
+        "name": "GOVERNANCE_HUB_DIFF_EXISTS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-VALIDATION-007",
       "kind": "rule",
       "next": [
         "PUBLICATION OR BLOCKED"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "PUBLICATION"
+        },
+        {
+          "condition": null,
+          "target": "BLOCKED"
+        }
       ],
       "sourceLine": 624,
       "type": "REQUIRED",
@@ -2103,6 +4760,13 @@
           "arguments": [
             "CENTRAL_REUSABLE_WORKFLOW_PINNED_BY_COMMIT_SHA"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "CENTRAL_REUSABLE_WORKFLOW_PINNED_BY_COMMIT_SHA",
+            "node": "symbol"
+          },
           "text": "REQUIRE CENTRAL_REUSABLE_WORKFLOW_PINNED_BY_COMMIT_SHA",
           "verb": "REQUIRE"
         },
@@ -2110,6 +4774,13 @@
           "arguments": [
             "EXTERNAL_REPOSITORY_RULESET_AND_CODEOWNER_REVIEW"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "EXTERNAL_REPOSITORY_RULESET_AND_CODEOWNER_REVIEW",
+            "node": "symbol"
+          },
           "text": "REQUIRE EXTERNAL_REPOSITORY_RULESET_AND_CODEOWNER_REVIEW",
           "verb": "REQUIRE"
         },
@@ -2119,17 +4790,38 @@
             "WHEN",
             "PARALLEL_WORKSTREAMS_ENABLED"
           ],
+          "guard": {
+            "name": "PARALLEL_WORKSTREAMS_ENABLED",
+            "node": "symbol"
+          },
+          "kind": "action",
+          "opcode": "REQUIRE",
+          "payload": {
+            "name": "MERGE_QUEUE",
+            "node": "symbol"
+          },
           "text": "REQUIRE MERGE_QUEUE WHEN PARALLEL_WORKSTREAMS_ENABLED",
           "verb": "REQUIRE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TARGET_WORKFLOW_CANNOT_SELF_APPROVE_OR_BYPASS_REQUIRED_STATUS",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TARGET_WORKFLOW_CANNOT_SELF_APPROVE_OR_BYPASS_REQUIRED_STATUS"
       ],
+      "condition": {
+        "name": "PULL_REQUEST_CHANGES_IMPLEMENTATION",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-CI-001",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 636,
       "type": "REQUIRED",
       "when": "PULL_REQUEST_CHANGES_IMPLEMENTATION"
@@ -2138,17 +4830,32 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "RUN_STACK_PROFILE_CHECKS_IN_PINNED_DOCKER_ENVIRONMENT",
+          "payload": null,
           "text": "RUN_STACK_PROFILE_CHECKS_IN_PINNED_DOCKER_ENVIRONMENT",
           "verb": "RUN_STACK_PROFILE_CHECKS_IN_PINNED_DOCKER_ENVIRONMENT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "TEST_EVIDENCE_AND_TOOL_AVAILABILITY_REPORTED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "TEST_EVIDENCE_AND_TOOL_AVAILABILITY_REPORTED"
       ],
+      "condition": {
+        "name": "STACK_DECLARED_IN_GOVERNANCE_MANIFEST",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-CI-002",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 643,
       "type": "REQUIRED",
       "when": "STACK_DECLARED_IN_GOVERNANCE_MANIFEST"
@@ -2163,17 +4870,56 @@
             "EVIDENCE",
             "REMEDIATION"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "EMIT",
+          "payload": {
+            "items": [
+              {
+                "name": "GOV_CODE",
+                "node": "symbol"
+              },
+              {
+                "name": "MESSAGE",
+                "node": "symbol"
+              },
+              {
+                "name": "PATH",
+                "node": "symbol"
+              },
+              {
+                "name": "EVIDENCE",
+                "node": "symbol"
+              },
+              {
+                "name": "REMEDIATION",
+                "node": "symbol"
+              }
+            ],
+            "node": "sequence"
+          },
           "text": "EMIT GOV_CODE MESSAGE PATH EVIDENCE REMEDIATION",
           "verb": "EMIT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "MERGE_BLOCKED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "MERGE_BLOCKED"
       ],
+      "condition": {
+        "name": "GOVERNANCE_OR_INTENT_CHECK_FAILS",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-CI-003",
       "kind": "rule",
       "next": [],
+      "nextTargets": [],
       "sourceLine": 648,
       "type": "REQUIRED",
       "when": "GOVERNANCE_OR_INTENT_CHECK_FAILS"
@@ -2184,6 +4930,13 @@
           "arguments": [
             "COMMIT"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SKIP",
+          "payload": {
+            "name": "COMMIT",
+            "node": "symbol"
+          },
           "text": "SKIP COMMIT",
           "verb": "SKIP"
         },
@@ -2191,18 +4944,41 @@
           "arguments": [
             "PUSH"
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "SKIP",
+          "payload": {
+            "name": "PUSH",
+            "node": "symbol"
+          },
           "text": "SKIP PUSH",
           "verb": "SKIP"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "GIT_HISTORY_UNCHANGED",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "GIT_HISTORY_UNCHANGED"
       ],
+      "condition": {
+        "name": "USER_DID_NOT_REQUEST_COMMIT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-PUBLISH-001",
       "kind": "rule",
       "next": [
         "DONE"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DONE"
+        }
       ],
       "sourceLine": 657,
       "type": "REQUIRED",
@@ -2216,6 +4992,13 @@
             "status",
             "--short\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REVIEW",
+          "payload": {
+            "node": "literal",
+            "value": "git status --short"
+          },
           "text": "REVIEW \"git status --short\"",
           "verb": "REVIEW"
         },
@@ -2224,23 +5007,50 @@
             "\"git",
             "diff\""
           ],
+          "guard": null,
+          "kind": "action",
+          "opcode": "REVIEW",
+          "payload": {
+            "node": "literal",
+            "value": "git diff"
+          },
           "text": "REVIEW \"git diff\"",
           "verb": "REVIEW"
         },
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "COMMIT_ATOMIC_CHANGE",
+          "payload": null,
           "text": "COMMIT_ATOMIC_CHANGE",
           "verb": "COMMIT_ATOMIC_CHANGE"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "COMMIT_DESCRIBES_REASON",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "COMMIT_DESCRIBES_REASON"
       ],
+      "condition": {
+        "name": "USER_REQUESTS_COMMIT",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-PUBLISH-002",
       "kind": "rule",
       "next": [
         "DONE"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DONE"
+        }
       ],
       "sourceLine": 664,
       "type": "REQUIRED",
@@ -2250,18 +5060,38 @@
       "actions": [
         {
           "arguments": [],
+          "guard": null,
+          "kind": "action",
+          "opcode": "PUSH_ONLY_AFTER_COMMIT",
+          "payload": null,
           "text": "PUSH_ONLY_AFTER_COMMIT",
           "verb": "PUSH_ONLY_AFTER_COMMIT"
+        }
+      ],
+      "assertionNodes": [
+        {
+          "name": "PUSH_TARGET_EXPLICIT",
+          "node": "symbol"
         }
       ],
       "assertions": [
         "PUSH_TARGET_EXPLICIT"
       ],
+      "condition": {
+        "name": "USER_REQUESTS_PUSH",
+        "node": "symbol"
+      },
       "forbids": [],
       "id": "C-PUBLISH-003",
       "kind": "rule",
       "next": [
         "DONE"
+      ],
+      "nextTargets": [
+        {
+          "condition": null,
+          "target": "DONE"
+        }
       ],
       "raw": [
         "DONE WHEN",
@@ -2294,6 +5124,7 @@
       "when": "USER_REQUESTS_PUSH"
     }
   ],
+  "schema": "wellmanifest.policy/ir/v1",
   "statements": [
     "RULE <STABLE_ID> [TYPE <TYPE>]",
     "WHEN <CONDITION>",
@@ -2351,96 +5182,139 @@
   ],
   "transitions": [
     {
+      "condition": null,
       "from": "START",
       "sourceLine": 320,
       "to": "ANALYSIS",
       "when": null
     },
     {
+      "condition": {
+        "name": "WORK_IS_DEFERRED",
+        "node": "symbol"
+      },
       "from": "ANALYSIS",
       "sourceLine": 321,
       "to": "BACKLOG",
       "when": "WORK_IS_DEFERRED"
     },
     {
+      "condition": {
+        "name": "PLANNING_RESUMES",
+        "node": "symbol"
+      },
       "from": "BACKLOG",
       "sourceLine": 322,
       "to": "PLAN",
       "when": "PLANNING_RESUMES"
     },
     {
+      "condition": null,
       "from": "ANALYSIS",
       "sourceLine": 323,
       "to": "PLAN",
       "when": null
     },
     {
+      "condition": {
+        "name": "TICKET_CREATED_OR_SCOPE_CHANGED",
+        "node": "symbol"
+      },
       "from": "PLAN",
       "sourceLine": 324,
       "to": "WAIT_FOR_APPROVAL",
       "when": "TICKET_CREATED_OR_SCOPE_CHANGED"
     },
     {
+      "condition": {
+        "name": "APPROVAL_NOT_REQUIRED",
+        "node": "symbol"
+      },
       "from": "PLAN",
       "sourceLine": 325,
       "to": "TOOLS",
       "when": "APPROVAL_NOT_REQUIRED"
     },
     {
+      "condition": {
+        "name": "SCOPE_CHANGED",
+        "node": "symbol"
+      },
       "from": "WAIT_FOR_APPROVAL",
       "sourceLine": 326,
       "to": "PLAN",
       "when": "SCOPE_CHANGED"
     },
     {
+      "condition": {
+        "name": "EXPLICIT_INTERACTIVE_APPROVAL_RECEIVED",
+        "node": "symbol"
+      },
       "from": "WAIT_FOR_APPROVAL",
       "sourceLine": 327,
       "to": "TOOLS",
       "when": "EXPLICIT_INTERACTIVE_APPROVAL_RECEIVED"
     },
     {
+      "condition": null,
       "from": "TOOLS",
       "sourceLine": 328,
       "to": "DELEGATION",
       "when": null
     },
     {
+      "condition": null,
       "from": "DELEGATION",
       "sourceLine": 329,
       "to": "EDIT",
       "when": null
     },
     {
+      "condition": null,
       "from": "EDIT",
       "sourceLine": 330,
       "to": "VALIDATION",
       "when": null
     },
     {
+      "condition": null,
       "from": "VALIDATION",
       "sourceLine": 331,
       "to": "PUBLICATION",
       "when": null
     },
     {
+      "condition": null,
       "from": "PUBLICATION",
       "sourceLine": 332,
       "to": "DONE",
       "when": null
     },
     {
+      "condition": {
+        "name": "REQUIRED_EVIDENCE_MISSING",
+        "node": "symbol"
+      },
       "from": "ANY",
       "sourceLine": 333,
       "to": "BLOCKED",
       "when": "REQUIRED_EVIDENCE_MISSING"
     },
     {
+      "condition": {
+        "name": "BLOCKER_RESOLVED_AND_SCOPE_REVIEW_REQUIRED",
+        "node": "symbol"
+      },
       "from": "BLOCKED",
       "sourceLine": 334,
       "to": "PLAN",
       "when": "BLOCKER_RESOLVED_AND_SCOPE_REVIEW_REQUIRED"
     },
     {
+      "condition": {
+        "name": "BLOCKER_RESOLVED_AND_APPROVED_SCOPE_UNCHANGED",
+        "node": "symbol"
+      },
       "from": "BLOCKED",
       "sourceLine": 335,
       "to": "IN_PROGRESS",
